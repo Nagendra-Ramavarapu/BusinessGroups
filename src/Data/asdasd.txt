@@ -1,0 +1,169 @@
+{
+        "GroupId": "I1",
+        "GroupName": "Business",
+        "GroupPassword": "I1@FirstGroup",
+        "CompleteGroupChilds": [
+          "I1",
+          "I2",
+          "I3",
+          "I4"
+        ],
+        "GroupConfig": {
+          "GroupMembers": [
+            {
+              "NagendraProj": 600
+            },
+            {
+              "SaiKiranProj": 500
+            }
+          ],
+          "EditAccess": [
+            "NagendraProj",
+            "SaiKiranProj"
+          ],
+          "GroupScale": "High",
+          "BusinessName": "IT",
+          "DefaultAdmin": "NagendraProj",
+          "Admin": "@PersonCreatedGroup",
+          "TotalInvestments": 0,
+          "Returns": 0,
+          "InvestmentStatus": "Profit",
+          "GroupWallet": 0,
+          "GroupCreatedOn": "@DateConversions",
+          "TotalMembers": 6,
+          "GeneralSecurity": [],
+          "MandatorySecurity": [],
+          "CurrentgroupChilds": []
+        },
+        "ChildConfig": {
+          "hasChildGroup": "Yes",
+          "childGroupsCount": 2,
+          "childGroups": [
+            "IT",
+            "Other"
+          ]
+        },
+        "ChildGroup": {
+          "IT": {
+            "GroupId": "I2",
+            "GroupName": "IT",
+            "GroupPassword": "I1@FirstChildGroup",
+            "GroupConfig": {
+              "GroupMembers": [],
+              "EditAccess": [
+                "NagendraProj"
+              ],
+              "GroupScale": "Low",
+              "BusinessName": "IT",
+              "DefaultAdmin": "NagendraProj",
+              "Admin": "@PersonCreatedGroup",
+              "TotalInvestments": 0,
+              "Returns": 0,
+              "InvestmentStatus": "Profit",
+              "GroupWallet": 0,
+              "GroupCreatedOn": "@DateConversions",
+              "TotalMembers": 6,
+              "GeneralSecurity": [],
+              "MandatorySecurity": [],
+              "CurrentgroupChilds": []
+            },
+            "ChildConfig": {
+              "hasChildGroup": "No",
+              "childGroupsCount": 0,
+              "childGroups": []
+            },
+            "ChildGroup": {}
+          },
+          "Other": {
+            "GroupId": "I3",
+            "GroupName": "Other",
+            "GroupPassword": "I1@SecondChildGroup",
+            "GroupConfig": {
+              "GroupMembers": [],
+              "EditAccess": [
+                "NagendraProj"
+              ],
+              "GroupScale": "Medium",
+              "BusinessName": "Non-IT",
+              "DefaultAdmin": "NagendraProj",
+              "Admin": "@PersonCreatedGroup",
+              "TotalInvestments": 0,
+              "Returns": 0,
+              "InvestmentStatus": "Profit",
+              "GroupWallet": 0,
+              "GroupCreatedOn": "@DateConversions",
+              "TotalMembers": 0,
+              "GeneralSecurity": [],
+              "MandatorySecurity": [],
+              "CurrentgroupChilds": []
+            },
+            "ChildConfig": {
+              "hasChildGroup": "Yes",
+              "childGroupsCount": 2,
+              "childGroups": []
+            },
+            "ChildGroup": {
+              "Construction": {
+                "GroupId": "I2",
+                "GroupName": "Construction",
+                "GroupPassword": "I1@FirstChildGroup",
+                "GroupConfig": {
+                  "GroupMembers": [],
+                  "EditAccess": [
+                    "NagendraProj"
+                  ],
+                  "GroupScale": "Low",
+                  "BusinessName": "Construction",
+                  "DefaultAdmin": "NagendraProj",
+                  "Admin": "@PersonCreatedGroup",
+                  "TotalInvestments": 0,
+                  "Returns": 0,
+                  "InvestmentStatus": "Profit",
+                  "GroupWallet": 0,
+                  "GroupCreatedOn": "@DateConversions",
+                  "TotalMembers": 6,
+                  "GeneralSecurity": [],
+                  "MandatorySecurity": [],
+                  "CurrentgroupChilds": []
+                },
+                "ChildConfig": {
+                  "hasChildGroup": "No",
+                  "childGroupsCount": 0,
+                  "childGroups": []
+                },
+                "ChildGroup": {}
+              },
+              "Hotels": {
+                "GroupId": "I4",
+                "GroupName": "IT",
+                "GroupPassword": "I4@SecondChildGroup",
+                "GroupConfig": {
+                  "GroupMembers": [],
+                  "EditAccess": [
+                    "NagendraProj"
+                  ],
+                  "GroupScale": "Low",
+                  "BusinessName": "Hotels",
+                  "DefaultAdmin": "NagendraProj",
+                  "Admin": "@PersonCreatedGroup",
+                  "TotalInvestments": 0,
+                  "Returns": 0,
+                  "InvestmentStatus": "Profit",
+                  "GroupWallet": 0,
+                  "GroupCreatedOn": "@DateConversions",
+                  "TotalMembers": 0,
+                  "GeneralSecurity": [],
+                  "MandatorySecurity": [],
+                  "CurrentgroupChilds": []
+                },
+                "ChildConfig": {
+                  "hasChildGroup": "No",
+                  "childGroupsCount": 0,
+                  "childGroups": []
+                },
+                "ChildGroup": {}
+              }
+            }
+          }
+        }
+      }

@@ -2,10 +2,6 @@ import React from "react";
 import clsx from "clsx";
 import store from "../Store/Store";
 import { connect } from "react-redux";
-import Avatar from "@material-ui/core/Avatar";
-import { Link } from "react-router-dom";
-import PostAddIcon from '@material-ui/icons/PostAdd';
-import AccountBalanceWalletOutlinedIcon from '@material-ui/icons/AccountBalanceWalletOutlined';
 import { makeStyles, withStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
@@ -21,20 +17,10 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
-import NotificationsNoneRoundedIcon from '@material-ui/icons/NotificationsNoneRounded';
-import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
 import { getUserInfo } from "../Selectors/index";
-import GroupAddRoundedIcon from "@material-ui/icons/GroupAddRounded";
-import GroupRoundedIcon from "@material-ui/icons/GroupRounded";
-import BusinessCenterTwoToneIcon from "@material-ui/icons/BusinessCenterTwoTone";
-import InfoTwoToneIcon from "@material-ui/icons/InfoTwoTone";
-import HelpTwoToneIcon from "@material-ui/icons/HelpTwoTone";
-import FeedbackTwoToneIcon from "@material-ui/icons/FeedbackTwoTone";
-import SettingsTwoToneIcon from "@material-ui/icons/SettingsTwoTone";
 import { useHistory } from "react-router-dom";
-import CreateGroup from "./CreateGroup";
+import NavbarItems from './NavbarItems'
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -115,90 +101,6 @@ const Navbar = () => {
     setOpen(false);
   }
 
-  const generalItems = [
-    {
-      name: "Home",
-      click: history => {
-        if (!(history.location && history.location.pathname === "/Home"))
-          history.push("/Home");
-      },
-      icon: <HomeRoundedIcon />
-    },
-    {
-      name: "NewsFeed",
-      click: history => {
-        if (!(history.location && history.location.pathname === "/NewsFeed"))
-          history.push("/NewsFeed");
-      },
-      icon: <PostAddIcon />
-    },
-
-
-    
-    {
-      name: "Create group",
-      click: history => {
-        if (!(history.location && history.location.pathname === "/CreateGroup"))
-          history.push("/CreateGroup");
-      },
-      icon: <GroupAddRoundedIcon />
-    },
-    {
-      name: "Join Group",
-      click: history => {
-        if (!(history.location && history.location.pathname === "/JoinGroup"))
-          history.push("/JoinGroup");
-      },
-      icon: <GroupRoundedIcon />
-    },
-    {
-      name: "Predict Business",
-      click: () => {},
-      icon: <BusinessCenterTwoToneIcon />
-    }
-  ];
-
-  const appItems = [
-    {
-      name: "About",
-      click: () => {},
-      icon: <InfoTwoToneIcon />
-    },
-    {
-      name: "Help",
-      click: () => {},
-      icon: <HelpTwoToneIcon />
-    },
-    {
-      name: "Feedback",
-      click: () => {},
-      icon: <FeedbackTwoToneIcon />
-    },
-    {
-      name: "Settings",
-      click: () => {},
-      icon: <SettingsTwoToneIcon />
-    }
-  ];
-
-  const toolbarItems = [
-    {
-      name:"Profile",
-      click: ()=>{},
-      icon:<Avatar> { store.getState().userReducer.UserInfo &&
-        store.getState().userReducer.UserInfo.Name.charAt(0)}</Avatar>
-    },
-    {
-      name:"Wallets",
-      click: ()=>{},
-      icon:<AccountBalanceWalletOutlinedIcon/>
-    },
-    {
-      name:"Notifications",
-      click: ()=>{},
-      icon:<NotificationsNoneRoundedIcon/>
-    }
-  ]
 
   return (
     <div className={classes.root}>
@@ -258,7 +160,7 @@ const Navbar = () => {
         </div>
         {/* <Divider /> */}
         <List>
-          {generalItems.map(items => (
+          {NavbarItems.generalItems.map(items => (
             <ListItem
               button
               onClick={() => {
@@ -279,7 +181,7 @@ const Navbar = () => {
         </List>
         <Divider variant="middle" />
         <List>
-          {appItems.map(items => (
+          {NavbarItems.appItems.map(items => (
             <ListItem button key={items.name}>
               <ListItemIcon>{items.icon}</ListItemIcon>
               <ListItemText> {items.name}</ListItemText>

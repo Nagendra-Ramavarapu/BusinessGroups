@@ -19,28 +19,41 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Typography from "@material-ui/core/Typography";
 import store from '../Store/Store'
 import Navbar from './Navbar'
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import NavbarDesktop from './NavbarDesktop'
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 
 const styles = makeStyles(theme => ({
   card: {
-    minWidth: "30vw",
-    maxWidth: "53vw"
+    minWidth: "50vw",
+    maxWidth: "50vw"
   },
   newsFeed: {
     // maxHeight: "44vh",
     // minHeight: "15vh",
     width: "60vw",
     maxWidth:"80vw",
-    paddingLeft: "5%",
+    marginTop:"10%"
+    // paddingLeft: "5%",
     // paddingTop: "10%"
     // overflowY: "scroll"
   },
   newsFeedPost: {
-    maxHeight: "20vh",
-    minHeight: "15vh",
-    width: "33vw",
-    paddingLeft: "5%",
+    maxHeight: "30vh",
+    minHeight: "20vh",
+    minWidth: "50vw",
+    maxWidth: "57vw"
     // paddingTop: "1%"
     // overflowY: "scroll"
+  },
+  userAvatar:{
+    float:'left'
+  },
+  newsfeedTextArea:{
+    minWidth: "42vw",
+    maxWidth: "42vw",
+    maxHeight:"10vh",
+    minHeight:"10vh"
   }
 }));
 
@@ -48,16 +61,19 @@ const WorkSpaceConfig = JSON.parse(WorkSpaceList);
 const newsFeedConfig = WorkSpaceConfig.WorkSpace.NewsFeed;
 const userGroups = Object.keys(newsFeedConfig);
 
+//Ref:http://mythemestore.com/friend-finder/newsfeed.html
+
 const NewsFeed = () => {
   const classes = styles();
+  const isMobile = useMediaQuery('(min-width: 320px) and (max-width: 600px)');
   return (
     <div align="center"> 
-    <Navbar/>
+    {isMobile && isMobile ? <Navbar />: <NavbarDesktop/>} 
     <div className={classes.newsFeed}>
       <div className={classes.newsFeedPost}>
-      <Avatar> { store.getState().userReducer.UserInfo &&
+      <Avatar className={classes.userAvatar}> { store.getState().userReducer.UserInfo &&
               store.getState().userReducer.UserInfo.Name.charAt(0)}</Avatar>
-      
+            <TextareaAutosize className={classes.newsfeedTextArea} placeholder="Type here and Share Your Thoughts to your Groups....!" /> 
       </div>
       {userGroups.map(
         userGroup =>

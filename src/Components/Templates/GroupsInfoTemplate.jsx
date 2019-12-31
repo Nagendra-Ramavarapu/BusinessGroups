@@ -3,6 +3,8 @@ import Navbar from "../Navbar";
 import GroupsListTemplate from './GroupsListTemplate'
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import SampleChart from '../Graphs/SampleChart'
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import NavbarDesktop from '../NavbarDesktop'
 
 const styles = makeStyles(theme => ({
   GroupsList: {
@@ -16,10 +18,11 @@ const styles = makeStyles(theme => ({
 
 const GroupsInfoTemplate = props => {
   const classes = styles();
+  const isMobile = useMediaQuery('(min-width: 320px) and (max-width: 600px)');
   let currentGroupInfo = props.location.state
   return (
     <div>
-      <Navbar />
+      {isMobile && isMobile ? <Navbar />: <NavbarDesktop/>} 
       Your Came to Group :{currentGroupInfo.GroupId}
       {/* {console.log(currentGroupInfo.GroupId)} */}
       {(Object.keys(currentGroupInfo.ChildGroup).length !== 0) ? <GroupsListTemplate groupsInfo ={currentGroupInfo.ChildGroup}/>: null}

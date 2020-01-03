@@ -34,8 +34,8 @@ const styles = makeStyles(theme => ({
     // paddingRight:"20%"
   },
   listItems: {
-    minWidth: "60vw",
-    maxWidth: "75vw",
+    minWidth: "50vw",
+    maxWidth: "53vw",
     maxHeight: "15vh"
     // overflowX: "auto",
     // overflowy: "auto"
@@ -97,12 +97,7 @@ const GroupsListTemplate = props => {
       {GroupsInfo.map(groups => (
         <List className={classes.listItems}>
           <ListItem>
-            {/* <Grid
-              container
-              direction="row"
-              justify="flex-start"
-              alignItems="center"
-            > */}
+          <Tooltip title={groups.GroupName}>
             <ListItem
               key={groups.GroupId}
               button
@@ -113,6 +108,7 @@ const GroupsListTemplate = props => {
               </ListItemAvatar>
               <ListItemText>{groups.GroupName}</ListItemText>
             </ListItem>
+            </Tooltip>
             {/* </Grid> */}
             {IconButtonItems.map(buttons =>
               !buttons.groupManagerAccess ? (

@@ -7,6 +7,40 @@ const usersListJson = {
       Gender: "Male",
       Wallet: 20000,
       GroupId: ["G1", "I1", "Y1", "LG1","EY1"],
+      GroupManagerRequests:[],
+      GroupRequests:[],
+      GroupInvites:[
+        {
+          GroupId:"GI1",
+          GroupName:"GroupInvite1 Company",
+          GroupDetails:{},
+          InviteStatus:"Pending"
+        },
+        {
+          GroupId:"GI2",
+          GroupName:"GroupInvite2 Company",
+          GroupDetails:{},
+          InviteStatus:"Pending"
+        },
+        {
+          GroupId:"GI3",
+          GroupName:"GroupInvite3 Company",
+          GroupDetails:{},
+          InviteStatus:"Pending"
+        },
+        {
+          GroupId:"GI4",
+          GroupName:"GroupInvite4 Company",
+          GroupDetails:{},
+          InviteStatus:"Pending"
+        },
+        {
+          GroupId:"GI5",
+          GroupName:"GroupInvite5 Company",
+          GroupDetails:{},
+          InviteStatus:"Pending"
+        }
+      ],
       GroupDetails: {
         _comment: " // Incorporate Group Details"
       }

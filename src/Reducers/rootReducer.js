@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import userReducer from "./userReducer";
-import groupsReducer from "./userReducer";
+import groupsReducer from "./groupsReducer";
 
 let rootReducer = combineReducers({
   userReducer,

@@ -2,7 +2,7 @@ import WorkSpaceList from "../Data/WorkSpaceList";
 import React from "react";
 import { connect } from "react-redux";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
-
+import store from '../Store/Store'
 import { getUserInfo } from "../Selectors/index";
 import { useHistory } from "react-router-dom";
 import GroupsListTemplate from "./Templates/GroupsListTemplate";
@@ -17,14 +17,15 @@ const styles = makeStyles(theme => ({
 }));
 
 const WorkSpaceConfig = JSON.parse(WorkSpaceList);
-const Groups = WorkSpaceConfig.WorkSpace.Groups;
+//const Groups = WorkSpaceConfig.WorkSpace.Groups;
+
 
 const ShowGroups = () => {
   const classes = styles();
-
+  const Groups=store.getState().groupsReducer.GroupsInfo
   // const currentUserInfo = UserDetails.UserInfo;
   // const currentUserName = currentUserInfo && currentUserInfo.UserName;
-
+  //console.log("In Higher Level group list",store.getState())
   return (
     // <div className={classes.GroupsList}>
       <GroupsListTemplate groupsInfo={Groups} />
@@ -35,5 +36,6 @@ const ShowGroups = () => {
 const mapStateToProps = state => ({
   UserDetails: getUserInfo(state)
 });
+
 
 export default connect(mapStateToProps, null)(withStyles(styles)(ShowGroups));

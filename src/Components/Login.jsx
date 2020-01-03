@@ -1,7 +1,7 @@
 import React, { useState, useReducer } from "react";
 import { connect } from "react-redux";
 import UsersList from "../Data/UsersList";
-import { setUserDetails } from "../actions/Creators/index";
+import { setUserDetails,setGroupsDetails } from "../actions/Creators/index";
 import store from "../Store/Store";
 import WorkSpaceList from "../Data/WorkSpaceList";
 import { getUserInfo } from "../Selectors/index";
@@ -53,7 +53,7 @@ const styles = makeStyles(theme => ({
     // right: theme.spacing(2),
   }
 }));
-const Login = ({ setUserDetails, UserDetails }) => {
+const Login = ({ setUserDetails,setGroupsDetails, UserDetails }) => {
   const classes = styles();
   const [userName, setUserName] = useState("");
   const [open, setOpen] = React.useState(false);
@@ -62,6 +62,7 @@ const Login = ({ setUserDetails, UserDetails }) => {
   let history = useHistory();
   const WorkSpaceConfig = JSON.parse(WorkSpaceList);
   const GroupsList = WorkSpaceConfig.WorkSpace.Groups;
+  // console.log(typeof(GroupsList))
 
   //Map dosen't have the inbuild break so use for loop or some
   //use this Link for ref: https://www.codexpedia.com/javascript/javascript-loop-through-array-and-object-properties/
@@ -85,6 +86,7 @@ const Login = ({ setUserDetails, UserDetails }) => {
     });
     if (userValid) {
       setUserDetails(userInfo);
+      setGroupsDetails(GroupsList)
       // console.log("Directly from Redux Store",store.getState())
       // console.log(" from Selector:",UserDetails)
       // window.location.href = '/HigherLevelGroupList'
@@ -172,6 +174,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setUserDetails: setDetails => {
     dispatch(setUserDetails(setDetails));
+  },
+  setGroupsDetails: setGroupDetails => {
+    dispatch(setGroupsDetails(setGroupDetails));
   }
 });
 

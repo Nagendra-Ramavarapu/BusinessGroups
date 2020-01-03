@@ -11,13 +11,14 @@ import TextField from "@material-ui/core/TextField";
 import PeopleAltOutlinedIcon from "@material-ui/icons/PeopleAltOutlined";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import SupervisedUserCircleOutlinedIcon from '@material-ui/icons/SupervisedUserCircleOutlined';
-import Chip from '@material-ui/core/Chip';
-import { Autocomplete } from '@material-ui/lab'
+import SupervisedUserCircleOutlinedIcon from "@material-ui/icons/SupervisedUserCircleOutlined";
+import Chip from "@material-ui/core/Chip";
+import { Autocomplete } from "@material-ui/lab";
 import UsersList from "../Data/UsersList";
 import WorkSpaceList from "../Data/WorkSpaceList";
 import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
+import { addNewGroupDetails } from "../actions/Creators/index";
 
 const styles = makeStyles(theme => ({
   bot: {
@@ -29,7 +30,7 @@ const styles = makeStyles(theme => ({
     float: "right"
   }
 }));
-const CreateGroup = () => {
+const CreateGroup = ({addNewGroupDetails}) => {
   const classes = styles();
   let usersData = JSON.parse(UsersList)["Users"];
   const WorkSpaceConfig = JSON.parse(WorkSpaceList);
@@ -68,10 +69,12 @@ const CreateGroup = () => {
   };
   const [groupConfig, setGroupConfig] = React.useState(initGroupConfig);
   const isMobile = useMediaQuery("(min-width: 320px) and (max-width: 600px)");
-  const handleSubmit = () =>{
-    console.log(groupConfig)
+  const handleSubmit = () => {
+    console.log(groupConfig);
+    addNewGroupDetails(groupConfig);
+    console.log("Line After Dispatching action")
     // history.push('/Home',groupConfig)
-  }
+  };
   //<pre/> tab spaces
   return (
     <div align="center">
@@ -86,7 +89,11 @@ const CreateGroup = () => {
         // className={classes.TextField}
         placeholder="Enter GroupName"
         onChange={e =>
-          setGroupConfig({ ...groupConfig, GroupName: e.target.value,GroupId:groupConfig.GroupName.charAt(0) })
+          setGroupConfig({
+            ...groupConfig,
+            GroupName: e.target.value,
+            GroupId: groupConfig.GroupName.charAt(0)
+          })
         }
         InputProps={{
           startAdornment: (
@@ -95,13 +102,16 @@ const CreateGroup = () => {
             </InputAdornment>
           )
         }}
-      /><br/>
+      />
+      <br />
       <TextField
         type="Password"
         placeholder="Set Group Password"
         value={groupConfig.GroupPassword}
         className={classes.TextField}
-        onChange={e=> setGroupConfig({...groupConfig,GroupPassword:e.target.value})}
+        onChange={e =>
+          setGroupConfig({ ...groupConfig, GroupPassword: e.target.value })
+        }
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -109,13 +119,16 @@ const CreateGroup = () => {
             </InputAdornment>
           )
         }}
-      /><br/>
-         <TextField
+      />
+      <br />
+      <TextField
         type="Number"
         placeholder="No of GroupMembers"
         value={groupConfig.TotalMembers}
         className={classes.TextField}
-        onChange={e=> setGroupConfig({...groupConfig,TotalMembers:e.target.value})}
+        onChange={e =>
+          setGroupConfig({ ...groupConfig, TotalMembers: e.target.value })
+        }
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -123,8 +136,9 @@ const CreateGroup = () => {
             </InputAdornment>
           )
         }}
-      /><br/>
-        {/* <TextField
+      />
+      <br />
+      {/* <TextField
         type="Text"
         placeholder="Add Group Members"
         value={groupConfig.TotalMembers}
@@ -158,12 +172,14 @@ const CreateGroup = () => {
             fullWidth
           />)}
           /> */}
-           <TextField
+      <TextField
         type="Number"
         placeholder="No of Child Groups"
         value={groupConfig.childGroupsCount}
         className={classes.TextField}
-        onChange={e=> setGroupConfig({...groupConfig,childGroupsCount:e.target.value})}
+        onChange={e =>
+          setGroupConfig({ ...groupConfig, childGroupsCount: e.target.value })
+        }
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -171,14 +187,15 @@ const CreateGroup = () => {
             </InputAdornment>
           )
         }}
-      /><br/>
+      />
+      <br />
       <Button
-          variant="contained"
-          className={classes.submitButton}
-          onClick={handleSubmit}
-        >
-          Submit
-        </Button>
+        variant="contained"
+        className={classes.submitButton}
+        onClick={handleSubmit}
+      >
+        Submit
+      </Button>
       <p>{groupConfig.childGroupsCount}</p>
       <div className={classes.botDiv}>
         {/* <p><i><b>Any queries,Tap me ....!</b></i></p> */}
@@ -192,4 +209,12 @@ const CreateGroup = () => {
   );
 };
 
-export default CreateGroup;
+const mapDispatchToProps = dispatch => ({
+  addNewGroupDetails: groupInfo => {
+    dispatch(addNewGroupDetails(groupInfo));
+  }
+});
+export default connect(
+  null,
+  mapDispatchToProps
+)(withStyles(styles)(CreateGroup));

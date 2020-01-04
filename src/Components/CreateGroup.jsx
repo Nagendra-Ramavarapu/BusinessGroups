@@ -82,9 +82,9 @@ const CreateGroup = ({ addNewGroupDetails }) => {
   return (
     <div align="center">
       {isMobile && isMobile ? <Navbar /> : <NavbarDesktop />}
-      <h1>
+      <h3>
         <i>Create your Bspace Groups </i>{" "}
-      </h1>
+      </h3>
       <TextField
         type="Text"
         value={groupConfig.GroupName}

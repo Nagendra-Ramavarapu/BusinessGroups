@@ -58,6 +58,7 @@ export default class Example extends PureComponent {
 
   render() {
     return (
+      <div align="center">
       <AreaChart
         width={500}
         height={400}
@@ -65,9 +66,10 @@ export default class Example extends PureComponent {
         margin={{
           top: 10,
           right: 15,
-          left: 10,
+          left: 28,
           bottom: 0
         }}
+
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="name" />
@@ -95,6 +97,7 @@ export default class Example extends PureComponent {
           fill="#ffc658"
         />
       </AreaChart>
+      </div>
     );
   }
 }

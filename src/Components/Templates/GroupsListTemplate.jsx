@@ -28,8 +28,10 @@ const styles = makeStyles(theme => ({
     // maxHeight: "32vh",
     // minHeight: "15vh",
     minWidth: "25vw",
-    paddingTop: "6%",
-    align: "Center"
+    marginTop: "3%",
+    marginBottom: "3%",
+    align: "Center",
+    //backgroundColor: "#4e464605"
     // float: "right"
     // paddingRight:"20%"
   },

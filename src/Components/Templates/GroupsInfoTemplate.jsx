@@ -21,9 +21,9 @@ const GroupsInfoTemplate = props => {
   const isMobile = useMediaQuery('(min-width: 320px) and (max-width: 600px)');
   let currentGroupInfo = props.location.state
   return (
-    <div>
+    <div align="center">
       {isMobile && isMobile ? <Navbar />: <NavbarDesktop/>} 
-      Your Came to Group :{currentGroupInfo.GroupId}
+    <p> Your Came to Group : <b><i>{currentGroupInfo.GroupName}</i></b></p>
       {/* {console.log(currentGroupInfo.GroupId)} */}
       {(Object.keys(currentGroupInfo.ChildGroup).length !== 0) ? <GroupsListTemplate groupsInfo ={currentGroupInfo.ChildGroup}/>: null}
       <SampleChart/>

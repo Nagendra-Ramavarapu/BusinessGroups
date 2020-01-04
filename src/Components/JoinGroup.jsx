@@ -31,7 +31,7 @@ const styles = makeStyles(theme => ({
     margin: 5,
     minWidth: "30vw",
     boxSizing: "border-box",
-    backgroundColor: "#f0f0f0"
+    backgroundColor: "#4e464605"
   }
 }));
 
@@ -43,9 +43,9 @@ const JoinGroup = () => {
   return (
     <div align="center">
       {isMobile && isMobile ? <Navbar /> : <NavbarDesktop />}
-      <h1>
+      <h3>
         <i> Check your Bspace Group Requests & Suggestions</i>
-      </h1>
+      </h3>
       <div
         align="center"
         className={

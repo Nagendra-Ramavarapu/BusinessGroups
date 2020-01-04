@@ -64,7 +64,7 @@ const WorkSpaceListJson = {
               childGroupsCount: 0,
               childGroups: []
             },
-            ChildGroup: {}
+            ChildGroup: []
           },
           {
             GroupId: "G3",
@@ -121,7 +121,7 @@ const WorkSpaceListJson = {
                   childGroupsCount: 0,
                   childGroups: []
                 },
-                ChildGroup: {}
+                ChildGroup: []
               },
               {
                 GroupId: "G5",
@@ -150,7 +150,7 @@ const WorkSpaceListJson = {
                   childGroupsCount: 0,
                   childGroups: []
                 },
-                ChildGroup: {}
+                ChildGroup: []
               }
             ]
           }
@@ -219,7 +219,7 @@ const WorkSpaceListJson = {
               childGroupsCount: 0,
               childGroups: []
             },
-            ChildGroup: {}
+            ChildGroup: []
           },
           {
             GroupId: "I3",
@@ -276,7 +276,7 @@ const WorkSpaceListJson = {
                   childGroupsCount: 0,
                   childGroups: []
                 },
-                ChildGroup: {}
+                ChildGroup: []
               },
               {
                 GroupId: "I5",
@@ -305,7 +305,7 @@ const WorkSpaceListJson = {
                   childGroupsCount: 0,
                   childGroups: []
                 },
-                ChildGroup: {}
+                ChildGroup: []
               }
             ]
           }
@@ -374,7 +374,7 @@ const WorkSpaceListJson = {
               childGroupsCount: 0,
               childGroups: []
             },
-            ChildGroup: {}
+            ChildGroup: []
           },
           {
             GroupId: "Y3",
@@ -431,7 +431,7 @@ const WorkSpaceListJson = {
                   childGroupsCount: 0,
                   childGroups: []
                 },
-                ChildGroup: {}
+                ChildGroup: []
               },
               {
                 GroupId: "Y5",
@@ -460,7 +460,7 @@ const WorkSpaceListJson = {
                   childGroupsCount: 0,
                   childGroups: []
                 },
-                ChildGroup: {}
+                ChildGroup: []
               }
             ]
           }
@@ -529,7 +529,7 @@ const WorkSpaceListJson = {
               childGroupsCount: 0,
               childGroups: []
             },
-            ChildGroup: {}
+            ChildGroup: []
           },
           {
             GroupId: "LG3",
@@ -586,7 +586,7 @@ const WorkSpaceListJson = {
                   childGroupsCount: 0,
                   childGroups: []
                 },
-                ChildGroup: {}
+                ChildGroup: []
               },
               {
                 GroupId: "LG5",
@@ -615,7 +615,7 @@ const WorkSpaceListJson = {
                   childGroupsCount: 0,
                   childGroups: []
                 },
-                ChildGroup: {}
+                ChildGroup: []
               }
             ]
           }
@@ -684,7 +684,7 @@ const WorkSpaceListJson = {
               childGroupsCount: 0,
               childGroups: []
             },
-            ChildGroup: {}
+            ChildGroup: []
           },
           {
             GroupId: "EY3",
@@ -741,7 +741,7 @@ const WorkSpaceListJson = {
                   childGroupsCount: 0,
                   childGroups: []
                 },
-                ChildGroup: {}
+                ChildGroup: []
               },
               {
                 GroupId: "EY5",
@@ -770,7 +770,7 @@ const WorkSpaceListJson = {
                   childGroupsCount: 0,
                   childGroups: []
                 },
-                ChildGroup: {}
+                ChildGroup: []
               }
             ]
           }

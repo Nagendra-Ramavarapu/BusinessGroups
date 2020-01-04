@@ -19,7 +19,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { getUserInfo } from "../Selectors/index";
 import { useHistory } from "react-router-dom";
-import NavbarItems from './NavbarItems'
+import NavbarItems from "./NavbarItems";
 
 const drawerWidth = 240;
 
@@ -82,8 +82,8 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     padding: theme.spacing(3)
   },
-  toolbarItems:{
-    float:'left'
+  toolbarItems: {
+    float: "left"
   }
 }));
 
@@ -100,7 +100,6 @@ const Navbar = () => {
   function handleDrawerClose() {
     setOpen(false);
   }
-
 
   return (
     <div className={classes.root}>

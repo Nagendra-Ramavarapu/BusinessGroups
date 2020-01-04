@@ -1,7 +1,7 @@
 import React, { useState, useReducer } from "react";
 import { connect } from "react-redux";
 import UsersList from "../Data/UsersList";
-import { setUserDetails,setGroupsDetails } from "../actions/Creators/index";
+import { setUserDetails, setGroupsDetails } from "../actions/Creators/index";
 import store from "../Store/Store";
 import WorkSpaceList from "../Data/WorkSpaceList";
 import { getUserInfo } from "../Selectors/index";
@@ -53,7 +53,7 @@ const styles = makeStyles(theme => ({
     // right: theme.spacing(2),
   }
 }));
-const Login = ({ setUserDetails,setGroupsDetails, UserDetails }) => {
+const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
   const classes = styles();
   const [userName, setUserName] = useState("");
   const [open, setOpen] = React.useState(false);
@@ -86,7 +86,7 @@ const Login = ({ setUserDetails,setGroupsDetails, UserDetails }) => {
     });
     if (userValid) {
       setUserDetails(userInfo);
-      setGroupsDetails(GroupsList)
+      setGroupsDetails(GroupsList);
       // console.log("Directly from Redux Store",store.getState())
       // console.log(" from Selector:",UserDetails)
       // window.location.href = '/HigherLevelGroupList'

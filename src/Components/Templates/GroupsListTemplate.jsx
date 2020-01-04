@@ -29,7 +29,7 @@ const styles = makeStyles(theme => ({
     // minHeight: "15vh",
     minWidth: "25vw",
     paddingTop: "6%",
-    align:"Center"
+    align: "Center"
     // float: "right"
     // paddingRight:"20%"
   },
@@ -97,19 +97,18 @@ const GroupsListTemplate = props => {
       {GroupsInfo.map(groups => (
         <List className={classes.listItems}>
           <ListItem>
-          <Tooltip title={groups.GroupName}>
-            <ListItem
-              key={groups.GroupId}
-              button
-              onClick={e => changeGroupChilds(groups, e, history)}
-            >
-              <ListItemAvatar>
-                <Avatar> {groups.GroupName.charAt(0)}</Avatar>
-              </ListItemAvatar>
-              <ListItemText>{groups.GroupName}</ListItemText>
-            </ListItem>
+            <Tooltip title={groups.GroupName}>
+              <ListItem
+                key={groups.GroupId}
+                button
+                onClick={e => changeGroupChilds(groups, e, history)}
+              >
+                <ListItemAvatar>
+                  <Avatar> {groups.GroupName.charAt(0)}</Avatar>
+                </ListItemAvatar>
+                <ListItemText>{groups.GroupName}</ListItemText>
+              </ListItem>
             </Tooltip>
-            {/* </Grid> */}
             {IconButtonItems.map(buttons =>
               !buttons.groupManagerAccess ? (
                 <Tooltip title={buttons.name}>
@@ -121,7 +120,6 @@ const GroupsListTemplate = props => {
                 </Tooltip>
               ) : null
             )}
-            {/* {extraIcons(groups, currentUserName)} */}
           </ListItem>
         </List>
       ))}

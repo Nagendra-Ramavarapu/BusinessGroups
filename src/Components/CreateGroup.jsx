@@ -28,9 +28,13 @@ const styles = makeStyles(theme => ({
   },
   botDiv: {
     float: "right"
+  },
+  TextField: {
+    margin: 5
+    //padding: "1%"
   }
 }));
-const CreateGroup = ({addNewGroupDetails}) => {
+const CreateGroup = ({ addNewGroupDetails }) => {
   const classes = styles();
   let usersData = JSON.parse(UsersList)["Users"];
   const WorkSpaceConfig = JSON.parse(WorkSpaceList);
@@ -68,12 +72,11 @@ const CreateGroup = ({addNewGroupDetails}) => {
     ChildGroup: []
   };
   const [groupConfig, setGroupConfig] = React.useState(initGroupConfig);
+  const [childs, setChilds] = React.useState(0);
   const isMobile = useMediaQuery("(min-width: 320px) and (max-width: 600px)");
   const handleSubmit = () => {
-    console.log(groupConfig);
     addNewGroupDetails(groupConfig);
-    console.log("Line After Dispatching action")
-    // history.push('/Home',groupConfig)
+    history.push("/Home");
   };
   //<pre/> tab spaces
   return (
@@ -86,7 +89,7 @@ const CreateGroup = ({addNewGroupDetails}) => {
         type="Text"
         value={groupConfig.GroupName}
         // label="Username"
-        // className={classes.TextField}
+        className={classes.TextField}
         placeholder="Enter GroupName"
         onChange={e =>
           setGroupConfig({

@@ -7,27 +7,28 @@ router.route("/").get((req, res) => {
     .catch(err => res.status(400).json("Error:" + err));
 });
 
-router.route("/newgroup").post((req, res) => {
+router.route("/NewGroup").post((req, res) => {
   const GroupId = req.body.GroupId;
   const GroupName = req.body.GroupName;
   const GroupPassword = req.body.GroupPassword;
   const CompleteGroupChilds = req.body.CompleteGroupChilds;
   const GroupConfig = req.body.GroupConfig;
-  const EditAccess = req.body.EditAccess;
-  const GroupScale = req.body.GroupScale;
-  const BusinessName = req.body.BusinessName;
-  const DefaultAdmin = req.body.DefaultAdmin;
-  const Admin = req.body.Admin;
-  const GroupManager = req.body.GroupManager;
-  const TotalInvestments = req.body.TotalInvestments;
-  const Returns = req.body.Returns;
-  const InvestmentStatus = req.body.InvestmentStatus;
-  const GroupWallet = req.body.GroupWallet;
-  const GroupCreatedOn = req.body.GroupCreatedOn;
-  const TotalMembers = req.body.TotalMembers;
-  const GeneralSecurity = req.body.GeneralSecurity;
-  const MandatorySecurity = req.body.MandatorySecurity;
-  const CurrentgroupChilds = req.body.CurrentgroupChilds;
+  // const GroupMembers = req.body.GroupMembers;
+  // const EditAccess = req.body.EditAccess;
+  // const GroupScale = req.body.GroupScale;
+  // const BusinessName = req.body.BusinessName;
+  // const DefaultAdmin = req.body.DefaultAdmin;
+  // const Admin = req.body.Admin;
+  // const GroupManager = req.body.GroupManager;
+  // const TotalInvestments = req.body.TotalInvestments;
+  // const Returns = req.body.Returns;
+  // const InvestmentStatus = req.body.InvestmentStatus;
+  // const GroupWallet = req.body.GroupWallet;
+  // const GroupCreatedOn = req.body.GroupCreatedOn;
+  // const TotalMembers = req.body.TotalMembers;
+  // const GeneralSecurity = req.body.GeneralSecurity;
+  // const MandatorySecurity = req.body.MandatorySecurity;
+  // const CurrentgroupChilds = req.body.CurrentgroupChilds;
   const ChildConfig = req.body.ChildConfig;
   const ChildGroup = req.body.ChildGroup;
   const newGroup = new Groups({
@@ -36,21 +37,22 @@ router.route("/newgroup").post((req, res) => {
     GroupPassword: GroupPassword,
     CompleteGroupChilds: CompleteGroupChilds,
     GroupConfig: GroupConfig,
-    EditAccess: EditAccess,
-    GroupScale: GroupScale,
-    BusinessName: BusinessName,
-    DefaultAdmin: DefaultAdmin,
-    Admin: Admin,
-    GroupManager: GroupManager,
-    TotalInvestments: TotalInvestments,
-    Returns: Returns,
-    InvestmentStatus: InvestmentStatus,
-    GroupWallet: GroupWallet,
-    GroupCreatedOn: GroupCreatedOn,
-    TotalMembers: TotalMembers,
-    GeneralSecurity: GeneralSecurity,
-    MandatorySecurity: MandatorySecurity,
-    CurrentgroupChilds: CurrentgroupChilds,
+    // GroupMembers: GroupMembers,
+    // EditAccess: EditAccess,
+    // GroupScale: GroupScale,
+    // BusinessName: BusinessName,
+    // DefaultAdmin: DefaultAdmin,
+    // Admin: Admin,
+    // GroupManager: GroupManager,
+    // TotalInvestments: TotalInvestments,
+    // Returns: Returns,
+    // InvestmentStatus: InvestmentStatus,
+    // GroupWallet: GroupWallet,
+    // GroupCreatedOn: GroupCreatedOn,
+    // TotalMembers: TotalMembers,
+    // GeneralSecurity: GeneralSecurity,
+    // MandatorySecurity: MandatorySecurity,
+    // CurrentgroupChilds: CurrentgroupChilds,
     ChildConfig: ChildConfig,
     ChildGroup: ChildGroup
   });

@@ -28,11 +28,13 @@ connection.once("open", () => {
 
 const UsersRouter = require("./Routes/Users");
 const GroupsRouter = require("./Routes/GroupsList");
-
+const NewsFeedRouter = require("./Routes/NewsFeed");
+const TransactionRouter = require("./Routes/Transactions");
 
 app.use("/Users", UsersRouter);
 app.use("/Groups", GroupsRouter);
-
+app.use("/NewsFeed", NewsFeedRouter);
+app.use("/Transactions", TransactionRouter);
 
 //starts the server
 app.listen(port, () => {

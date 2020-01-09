@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import { connect } from "react-redux";
 import UsersList from "../Data/UsersList";
 import { setUserDetails, setGroupsDetails } from "../actions/Creators/index";
@@ -26,6 +26,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import SignUp from "./SignUp";
 import Bot from "../Icons/Bot.png";
+import axios from "axios";
 
 // import { useHistory } from "react-router-dom";
 const styles = makeStyles(theme => ({
@@ -55,7 +56,13 @@ const styles = makeStyles(theme => ({
 }));
 const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
   const classes = styles();
-  const [userName, setUserName] = useState("");
+  let userDetailsTemplate = {
+    Username: "",
+    Password: "",
+    doAPIcall: false
+  };
+  const [loginInfo, setUserName] = useState(userDetailsTemplate);
+  const [UserDB, setUserDB] = useState({});
   const [open, setOpen] = React.useState(false);
   let userValid, userInfo;
   let usersData = JSON.parse(UsersList);
@@ -70,31 +77,39 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
 
   // ---------> Using Native For Loop <--------------------
   //   for (let users = 0; users < usersData["Users"].length; users++) {
-  //     if (usersData["Users"][users].UserName === userName) {
+  //     if (usersData["Users"][users].Username === userDetails.Username) {
   //       userValid = true;
   //
   //       break;
   //     }
   //   }
   // ---------> Using Default 'Some' <----------------------
+  // userValid = usersData["Users"].some(user => {
+  //   userInfo = user;
+  //   return user.Username === userDetails.Username;
+  // });${userDetails.Username}
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/Users/${loginInfo.Username}`)
+      .then(res => setUserDB(res.data[0]))
+      .catch(err => console.log(err));
+  }, [loginInfo.doAPIcall]);
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    userValid = usersData["Users"].some(user => {
-      userInfo = user;
-      return user.UserName === userName;
-    });
-    if (userValid) {
-      setUserDetails(userInfo);
-      setGroupsDetails(GroupsList);
-      // console.log("Directly from Redux Store",store.getState())
-      // console.log(" from Selector:",UserDetails)
-      // window.location.href = '/HigherLevelGroupList'
-      let ProcessedData = ProcessGroupData(GroupsList, userInfo);
+    setUserName({ ...loginInfo, doAPIcall: true });
+
+    if (UserDB.Username && UserDB.Username === loginInfo.Username) {
+      setUserDetails(UserDB);
+      // setGroupsDetails(GroupsList);
+      // let ProcessedData = ProcessGroupData(GroupsList, userInfo);
       history.push("/Home");
     } else {
+      console.log("Else Condition:", UserDB);
       alert("Invalid Credentials");
     }
+    console.log("Outside If-else", UserDB);
   };
 
   const handleClickOpen = () => {
@@ -111,11 +126,12 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
       <form>
         <TextField
           type="Text"
-          value={userName}
-          // label="Username"
+          value={loginInfo.Username}
           className={classes.TextField}
           placeholder="Enter Username"
-          onChange={e => setUserName(e.target.value)}
+          onChange={e =>
+            setUserName({ ...loginInfo, Username: e.target.value })
+          }
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -127,9 +143,12 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
         <br />
         <TextField
           type="Password"
-          // label="Password"
+          value={loginInfo.Password}
           placeholder="Enter Psssword"
           className={classes.TextField}
+          onChange={e =>
+            setUserName({ ...loginInfo, Password: e.target.value })
+          }
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">

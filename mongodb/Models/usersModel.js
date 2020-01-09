@@ -14,8 +14,12 @@ const userSchema = new Schema(
     Name: { type: String, required: true },
     Gender: { type: String },
     Wallet: { type: Number },
+    GroupID:{type:Array},
     ContactNumber:{type:Number},
-    GroupsInfo: { type: Array }
+    GroupManagerRequests:{type:Array},
+    GroupRequests:{type:Array},
+    GroupInvites:{type:Array},
+    GroupsInfo: { type: Array },
   },
   {
     timestamps: true

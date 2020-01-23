@@ -62,16 +62,25 @@ const CreateGroup = ({ addNewGroupDetails }) => {
     },
     ChildConfig: {
       hasChildGroup: "",
-      childGroupsCount: 0,
-      childGroups: []
+      childGroupsCount: 0
     },
     ChildGroup: []
   };
   const [groupConfig, setGroupConfig] = React.useState(initGroupConfig);
   const isMobile = useMediaQuery("(min-width: 320px) and (max-width: 600px)");
   const handleSubmit = () => {
-    console.log(groupConfig);
+    // for (
+    //   let childGroups = 0;
+    //   childGroups < groupConfig.ChildConfig.childGroupsCount;
+    //   childGroups++
+    // ) {
+    //   setGroupConfig({
+    //     ...groupConfig,
+    //     ChildGroup: { ...groupConfig.ChildGroup, ChildGroup:groupConfig.ChildGroup[childGroups] }
+    //   });
+    // }
     addNewGroupDetails(groupConfig);
+   //console.log(groupConfig)
     history.push("/Home");
   };
   //<pre/> tab spaces
@@ -127,7 +136,10 @@ const CreateGroup = ({ addNewGroupDetails }) => {
         onChange={e =>
           setGroupConfig({
             ...groupConfig,
-            TotalMembers: e.target.value
+            GroupConfig: {
+              ...groupConfig.GroupConfig,
+              TotalMembers: e.target.value
+            }
           })
         }
         InputProps={{
@@ -147,7 +159,10 @@ const CreateGroup = ({ addNewGroupDetails }) => {
         onChange={e =>
           setGroupConfig({
             ...groupConfig,
-            ChildConfig: { childGroupsCount: e.target.value }
+            ChildConfig: {
+              ...groupConfig.ChildConfig,
+              childGroupsCount: e.target.value
+            }
           })
         }
         InputProps={{

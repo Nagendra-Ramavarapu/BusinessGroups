@@ -132,7 +132,7 @@ const GroupsListTemplate = props => {
                      {buttons.Icon}
                    </IconButton>
                  ) : (
-                   <IconButton > {buttons.Icon}</IconButton>
+                   <IconButton  onClick={setGroupChilds(buttons.name,groups)}> {buttons.Icon}</IconButton>
                  )}
                 </Tooltip>
               ) : currentUserName === groups.GroupConfig.GroupManager ? (
@@ -153,5 +153,10 @@ const changeGroupChilds = (groups, event, history) => {
     ? (event.target.value = groups)
     : history.push(`/GroupsInfoTemplate/${groups.GroupId}`, groups);
 };
+
+const setGroupChilds = (groups) =>{
+ //console.log(groups)
+
+}
 
 export default withStyles(styles)(GroupsListTemplate);

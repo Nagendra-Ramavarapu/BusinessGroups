@@ -36,11 +36,7 @@ const styles = makeStyles(theme => ({
 }));
 const CreateGroup = ({ addNewGroupDetails }) => {
   const classes = styles();
-  let usersData = JSON.parse(UsersList)["Users"];
-  const WorkSpaceConfig = JSON.parse(WorkSpaceList);
-  let GroupsList = WorkSpaceConfig.WorkSpace.Groups;
   let history = useHistory();
-  // console.log(usersData)
   let initGroupConfig = {
     GroupId: "",
     GroupName: "",
@@ -53,7 +49,7 @@ const CreateGroup = ({ addNewGroupDetails }) => {
       BusinessName: "",
       DefaultAdmin: "",
       Admin: "",
-      GroupManager: "",
+      GroupManager: "NagendraProj",
       TotalInvestments: 0,
       Returns: 0,
       InvestmentStatus: "",
@@ -72,9 +68,9 @@ const CreateGroup = ({ addNewGroupDetails }) => {
     ChildGroup: []
   };
   const [groupConfig, setGroupConfig] = React.useState(initGroupConfig);
-  const [childs, setChilds] = React.useState(0);
   const isMobile = useMediaQuery("(min-width: 320px) and (max-width: 600px)");
   const handleSubmit = () => {
+    console.log(groupConfig);
     addNewGroupDetails(groupConfig);
     history.push("/Home");
   };
@@ -88,7 +84,6 @@ const CreateGroup = ({ addNewGroupDetails }) => {
       <TextField
         type="Text"
         value={groupConfig.GroupName}
-        // label="Username"
         className={classes.TextField}
         placeholder="Enter GroupName"
         onChange={e =>
@@ -130,7 +125,10 @@ const CreateGroup = ({ addNewGroupDetails }) => {
         value={groupConfig.TotalMembers}
         className={classes.TextField}
         onChange={e =>
-          setGroupConfig({ ...groupConfig, TotalMembers: e.target.value })
+          setGroupConfig({
+            ...groupConfig,
+            TotalMembers: e.target.value
+          })
         }
         InputProps={{
           startAdornment: (
@@ -141,47 +139,16 @@ const CreateGroup = ({ addNewGroupDetails }) => {
         }}
       />
       <br />
-      {/* <TextField
-        type="Text"
-        placeholder="Add Group Members"
-        value={groupConfig.TotalMembers}
-        className={classes.TextField}
-        onChange={e=> setGroupConfig({...groupConfig,TotalMembers:e.target.value})}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SupervisedUserCircleOutlinedIcon />
-            </InputAdornment>
-          )
-        }}
-      /><br/> */}
-      {/* <Autocomplete
-        multiple
-        // id="tags-standard"
-        options={usersData}
-        getOptionLabel={option => option.UserName}
-        // defaultValue={[top100Films[13]]}
-        freeSolo
-        renderTags={(value, getTagProps) =>
-          value.map((option, index) => (
-            <Chip variant="outlined" label={option} {...getTagProps({ index })} />
-          ))
-        }
-        renderInput={params => (
-          <TextField
-            {...params}
-            variant="standard"
-            placeholder="Add Group Members"
-            fullWidth
-          />)}
-          /> */}
       <TextField
         type="Number"
         placeholder="No of Child Groups"
         value={groupConfig.childGroupsCount}
         className={classes.TextField}
         onChange={e =>
-          setGroupConfig({ ...groupConfig, childGroupsCount: e.target.value })
+          setGroupConfig({
+            ...groupConfig,
+            ChildConfig: { childGroupsCount: e.target.value }
+          })
         }
         InputProps={{
           startAdornment: (
@@ -199,7 +166,6 @@ const CreateGroup = ({ addNewGroupDetails }) => {
       >
         Submit
       </Button>
-      <p>{groupConfig.childGroupsCount}</p>
       <div className={classes.botDiv}>
         {/* <p><i><b>Any queries,Tap me ....!</b></i></p> */}
         <Tooltip title={"I'm not configured yet...!"}>

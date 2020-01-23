@@ -41,6 +41,12 @@ const styles = makeStyles(theme => ({
     maxHeight: "15vh"
     // overflowX: "auto",
     // overflowy: "auto"
+  },
+  investmentStatusLoss: {
+    color: "Red"
+  },
+  investmentStatusProfit: {
+    color: "Green"
   }
 }));
 const IconButtonItems = [
@@ -48,7 +54,8 @@ const IconButtonItems = [
     name: "AddGroupMember",
     Icon: <GroupAddOutlinedIcon />,
     groupManagerAccess: true,
-    showTooltip: true
+    showTooltip: true,
+    click:()=>{}
   },
 
   {
@@ -93,7 +100,7 @@ const GroupsListTemplate = props => {
   let history = useHistory();
   // console.log(history)
   let GroupsInfo = props.groupsInfo;
-  let currentUserName = store.getState().userReducer.UserInfo.UserName;
+  let currentUserName = store.getState().userReducer.UserInfo.Username;
   return (
     <div align="center" className={classes.GroupsList}>
       {GroupsInfo.map(groups => (
@@ -114,7 +121,19 @@ const GroupsListTemplate = props => {
             {IconButtonItems.map(buttons =>
               !buttons.groupManagerAccess ? (
                 <Tooltip title={buttons.name}>
-                  <IconButton> {buttons.Icon}</IconButton>
+                  {buttons.name === "BusinessLine" ? (
+                   <IconButton
+                     className={
+                       groups.GroupConfig.InvestmentStatus === "Loss"
+                         ? classes.investmentStatusLoss
+                         : classes.investmentStatusProfit
+                     }
+                   >
+                     {buttons.Icon}
+                   </IconButton>
+                 ) : (
+                   <IconButton > {buttons.Icon}</IconButton>
+                 )}
                 </Tooltip>
               ) : currentUserName === groups.GroupConfig.GroupManager ? (
                 <Tooltip title={buttons.name}>
@@ -128,30 +147,6 @@ const GroupsListTemplate = props => {
     </div>
   );
 };
-// const extraIcons = (groups, currentUserName) => {
-//   return (
-//     <div>
-//     {/* // <Grid */}
-//     {/* //   container
-//     //   direction="row"
-//     //   justify="flex-start"
-//     //   alignItems="flex-start"
-//     // > */}
-//       {IconButtonItems.map(buttons =>
-//         !buttons.groupManagerAccess ? (
-//           <Tooltip title={buttons.name}>
-//             <IconButton> {buttons.Icon}</IconButton>
-//           </Tooltip>
-//         ) : currentUserName === groups.GroupConfig.GroupManager ? (
-//           <Tooltip title={buttons.name}>
-//             <IconButton>{buttons.Icon}</IconButton>
-//           </Tooltip>
-//         ) : null
-//       )}
-//       </div>
-//     // {/* // </Grid> */}
-//   );
-// };
 
 const changeGroupChilds = (groups, event, history) => {
   event.target === null

@@ -12,7 +12,7 @@ import Fab from "@material-ui/core/Fab";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { useHistory } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
-import ProcessGroupData from "../DataProcess/ProcessGroupData";
+import GetUsersGroupData from "../DataProcess/ProcessGroupData";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import AccountCircleRoundedIcon from "@material-ui/icons/AccountCircleRounded";
@@ -98,18 +98,17 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
 
   const handleSubmit = evt => {
     evt.preventDefault();
+    console.log(loginInfo)
     setUserName({ ...loginInfo, doAPIcall: true });
 
     if (UserDB.Username && UserDB.Username === loginInfo.Username) {
       setUserDetails(UserDB);
-      // setGroupsDetails(GroupsList);
-      // let ProcessedData = ProcessGroupData(GroupsList, userInfo);
+      let ProcessedData = GetUsersGroupData(GroupsList, UserDB.GroupID);
+      setGroupsDetails(ProcessedData);
       history.push("/Home");
     } else {
-      console.log("Else Condition:", UserDB);
       alert("Invalid Credentials");
     }
-    console.log("Outside If-else", UserDB);
   };
 
   const handleClickOpen = () => {

@@ -66,21 +66,46 @@ const CreateGroup = ({ addNewGroupDetails }) => {
     },
     ChildGroup: []
   };
+  let SampleGroupConfig = {
+    GroupId: "",
+    GroupName: "",
+    GroupPassword: "",
+    CompleteGroupChilds: [],
+    GroupConfig: {
+      GroupMembers: [],
+      EditAccess: ["NagendraProj"],
+      GroupScale: "",
+      BusinessName: "",
+      DefaultAdmin: "",
+      Admin: "",
+      GroupManager: "NagendraProj",
+      TotalInvestments: 0,
+      Returns: 0,
+      InvestmentStatus: "",
+      GroupWallet: 0,
+      GroupCreatedOn: "",
+      TotalMembers: 0,
+      GeneralSecurity: [],
+      MandatorySecurity: [],
+      CurrentgroupChilds: []
+    },
+    ChildConfig: {
+      hasChildGroup: "",
+      childGroupsCount: 0,
+      childGroups: []
+    },
+    ChildGroup: []
+  };
   const [groupConfig, setGroupConfig] = React.useState(initGroupConfig);
   const isMobile = useMediaQuery("(min-width: 320px) and (max-width: 600px)");
+  //const [isAllGroupsCreated, setGroupsCreationStatus] = React.useState(false);
+
   const handleSubmit = () => {
-    // for (
-    //   let childGroups = 0;
-    //   childGroups < groupConfig.ChildConfig.childGroupsCount;
-    //   childGroups++
-    // ) {
-    //   setGroupConfig({
-    //     ...groupConfig,
-    //     ChildGroup: { ...groupConfig.ChildGroup, ChildGroup:groupConfig.ChildGroup[childGroups] }
-    //   });
-    // }
+    for (let i = 0; i < groupConfig.ChildConfig.childGroupsCount; i++) {
+      groupConfig.ChildGroup.push(SampleGroupConfig);
+    }
+    console.log(groupConfig)
     addNewGroupDetails(groupConfig);
-   //console.log(groupConfig)
     history.push("/Home");
   };
   //<pre/> tab spaces

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -20,8 +20,18 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import store from "../../Store/Store";
 import Tooltip from "@material-ui/core/Tooltip";
+import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import PlayForWorkRoundedIcon from "@material-ui/icons/PlayForWorkRounded";
 import { withRouter } from "react-router";
+import ChildGroupsInfoTemplate from "./ChildGroupsInfoTemplate";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 
 const styles = makeStyles(theme => ({
   GroupsList: {
@@ -30,7 +40,7 @@ const styles = makeStyles(theme => ({
     minWidth: "25vw",
     marginTop: "3%",
     marginBottom: "3%",
-    align: "Center",
+    align: "Center"
     //backgroundColor: "#4e464605"
     // float: "right"
     // paddingRight:"20%"
@@ -49,58 +59,81 @@ const styles = makeStyles(theme => ({
     color: "Green"
   }
 }));
-const IconButtonItems = [
-  {
-    name: "AddGroupMember",
-    Icon: <GroupAddOutlinedIcon />,
-    groupManagerAccess: true,
-    showTooltip: true,
-    click:()=>{}
-  },
 
-  {
-    name: "Report",
-    Icon: <EqualizerOutlinedIcon />,
-    groupManagerAccess: false,
-    showTooltip: true
-  },
-  {
-    name: "PostTransactionUpdate",
-    Icon: <PostAddOutlinedIcon />,
-    groupManagerAccess: true,
-    showTooltip: true
-  },
-  {
-    name: "BusinessLine",
-    Icon: <TrendingUpOutlinedIcon />,
-    groupManagerAccess: false,
-    showTooltip: true
-  },
-  {
-    name: "Child Groups",
-    Icon: <PlayForWorkRoundedIcon />,
-    groupManagerAccess: false,
-    showTooltip: true
-  },
-  {
-    name: "Bookmark",
-    Icon: <StarBorderIcon />,
-    groupManagerAccess: false,
-    showTooltip: true
-  },
-  {
-    name: "MoreItems",
-    Icon: <MoreVertOutlinedIcon />,
-    groupManagerAccess: false,
-    showTooltip: true
-  }
-];
 const GroupsListTemplate = props => {
   const classes = styles();
   let history = useHistory();
+  const [openChildGroupsInfoDialog, setChildGroupsInfoDialog] = useState(false);
+  const [currentGroup, setCurrentGroup] = useState({});
   // console.log(history)
+  const IconButtonItems = [
+    {
+      name: "ModifyChildGroups",
+      Icon: <GroupAddOutlinedIcon />,
+      groupManagerAccess: true,
+      showTooltip: true,
+      click: groups => {
+        setCurrentGroup(groups);
+        setChildGroupsInfoDialog(true);
+      }
+    },
+
+    {
+      name: "Report",
+      Icon: <EqualizerOutlinedIcon />,
+      groupManagerAccess: false,
+      showTooltip: true,
+      click: () => {}
+    },
+    {
+      name: "PostTransactionUpdate",
+      Icon: <PostAddOutlinedIcon />,
+      groupManagerAccess: true,
+      showTooltip: true,
+      click: () => {}
+    },
+    {
+      name: "BusinessLine",
+      Icon: <TrendingUpOutlinedIcon />,
+      groupManagerAccess: false,
+      showTooltip: true,
+      click: () => {}
+    },
+    {
+      name: "Child Groups",
+      Icon: <PlayForWorkRoundedIcon />,
+      groupManagerAccess: false,
+      showTooltip: true,
+      click: () => {}
+    },
+    {
+      name: "Bookmark",
+      Icon: <StarBorderIcon />,
+      groupManagerAccess: false,
+      showTooltip: true,
+      click: () => {}
+    },
+    {
+      name: "Delete",
+      Icon: <DeleteOutlineOutlinedIcon />,
+      groupManagerAccess: true,
+      showTooltip: true,
+      click: () => {}
+    },
+    {
+      name: "MoreItems",
+      Icon: <MoreVertOutlinedIcon />,
+      groupManagerAccess: false,
+      showTooltip: true,
+      click: () => {}
+    }
+  ];
   let GroupsInfo = props.groupsInfo;
   let currentUserName = store.getState().userReducer.UserInfo.Username;
+  const closeChildGroupsInfoDialog = () => {
+    setChildGroupsInfoDialog(false);
+  };
+
   return (
     <div align="center" className={classes.GroupsList}>
       {GroupsInfo.map(groups => (
@@ -122,28 +155,55 @@ const GroupsListTemplate = props => {
               !buttons.groupManagerAccess ? (
                 <Tooltip title={buttons.name}>
                   {buttons.name === "BusinessLine" ? (
-                   <IconButton
-                     className={
-                       groups.GroupConfig.InvestmentStatus === "Loss"
-                         ? classes.investmentStatusLoss
-                         : classes.investmentStatusProfit
-                     }
-                   >
-                     {buttons.Icon}
-                   </IconButton>
-                 ) : (
-                   <IconButton  onClick={setGroupChilds(buttons.name,groups)}> {buttons.Icon}</IconButton>
-                 )}
+                    <IconButton
+                      className={
+                        groups.GroupConfig.InvestmentStatus === "Loss"
+                          ? classes.investmentStatusLoss
+                          : classes.investmentStatusProfit
+                      }
+                    >
+                      {buttons.Icon}
+                    </IconButton>
+                  ) : (
+                    <IconButton onClick={setGroupChilds(buttons.name, groups)}>
+                      {" "}
+                      {buttons.Icon}
+                    </IconButton>
+                  )}
                 </Tooltip>
               ) : currentUserName === groups.GroupConfig.GroupManager ? (
                 <Tooltip title={buttons.name}>
-                  <IconButton>{buttons.Icon}</IconButton>
+                  <IconButton
+                    onClick={() => {
+                      buttons.click(groups);
+                    }}
+                  >
+                    {buttons.Icon}
+                  </IconButton>
                 </Tooltip>
               ) : null
             )}
           </ListItem>
         </List>
       ))}
+      <Dialog
+        open={openChildGroupsInfoDialog}
+        onClose={closeChildGroupsInfoDialog}
+      >
+        <DialogTitle id="form-dialog-title">
+          Edit {currentGroup.GroupName} Sub Groups Info
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Note: This is Edit Panel,Change details only if required
+          </DialogContentText>
+          <ChildGroupsInfoTemplate {...currentGroup} />
+        </DialogContent>
+        <DialogActions>
+          <Button>Cancel</Button>
+          <Button>Save</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
@@ -154,9 +214,8 @@ const changeGroupChilds = (groups, event, history) => {
     : history.push(`/GroupsInfoTemplate/${groups.GroupId}`, groups);
 };
 
-const setGroupChilds = (groups) =>{
- //console.log(groups)
-
-}
+const setGroupChilds = groups => {
+  //console.log(groups)
+};
 
 export default withStyles(styles)(GroupsListTemplate);

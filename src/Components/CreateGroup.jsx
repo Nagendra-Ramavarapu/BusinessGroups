@@ -6,19 +6,16 @@ import Bot from "../Icons/Bot.png";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
 import Tooltip from "@material-ui/core/Tooltip";
-import React, { useState, useReducer } from "react";
+import React from "react";
 import TextField from "@material-ui/core/TextField";
 import PeopleAltOutlinedIcon from "@material-ui/icons/PeopleAltOutlined";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import SupervisedUserCircleOutlinedIcon from "@material-ui/icons/SupervisedUserCircleOutlined";
-import Chip from "@material-ui/core/Chip";
-import { Autocomplete } from "@material-ui/lab";
-import UsersList from "../Data/UsersList";
-import WorkSpaceList from "../Data/WorkSpaceList";
 import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
 import { addNewGroupDetails } from "../actions/Creators/index";
+import AccountTreeOutlinedIcon from '@material-ui/icons/AccountTreeOutlined';
 
 const styles = makeStyles(theme => ({
   bot: {
@@ -193,7 +190,7 @@ const CreateGroup = ({ addNewGroupDetails }) => {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <SupervisedUserCircleOutlinedIcon />
+              <AccountTreeOutlinedIcon />
             </InputAdornment>
           )
         }}

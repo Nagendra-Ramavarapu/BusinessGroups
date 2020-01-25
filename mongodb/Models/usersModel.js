@@ -16,6 +16,7 @@ const userSchema = new Schema(
     Wallet: { type: Number },
     GroupID:{type:Array},
     ContactNumber:{type:Number},
+    Email:{type:String},
     GroupManagerRequests:{type:Array},
     GroupRequests:{type:Array},
     GroupInvites:{type:Array},

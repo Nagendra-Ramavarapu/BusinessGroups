@@ -21,6 +21,7 @@ router.route("/SignUp").post((req, res) => {
   const Wallet = req.body.Wallet;
   const GroupID = req.body.GroupID;
   const ContactNumber = req.body.ContactNumber;
+  const Email = req.body.Email;
   const GroupManagerRequests = req.body.GroupManagerRequests;
   const GroupRequests = req.body.GroupRequests;
   const GroupInvites= req.body.GroupInvites;
@@ -34,6 +35,7 @@ router.route("/SignUp").post((req, res) => {
     Wallet: Wallet,
     GroupID:GroupID,
     ContactNumber: ContactNumber,
+    Email:Email,
     GroupManagerRequests:GroupManagerRequests,
     GroupRequests:GroupRequests,
     GroupInvites:GroupInvites,

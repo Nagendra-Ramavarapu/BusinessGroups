@@ -13,11 +13,12 @@ export default (state = initialState, action) => {
       return state;
     }
     case groupsTypes.ADD_NEW_GROUP_DETAILS: {
-      // state={...state,GroupsInfo:{...state.GroupsInfo,...action.payload}}
-      //state={...state,GroupsInfo:{...state.GroupsInfo,...action.payload}}
       return Object.assign({}, state, {
         GroupsInfo: state.GroupsInfo.concat(action.payload)
       });
+    }
+    case groupsTypes.UPDATE_GROUP_INFO: {
+      return console.log("Update Group Details Reducer", state);
     }
     default:
       return state;

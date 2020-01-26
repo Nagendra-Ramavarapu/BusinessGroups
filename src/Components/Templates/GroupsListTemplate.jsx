@@ -3,14 +3,10 @@ import { useHistory } from "react-router-dom";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Avatar from "@material-ui/core/Avatar";
-import { matchPath } from "react-router";
+import { connect } from "react-redux";
 import IconButton from "@material-ui/core/IconButton";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
-// import FavoriteBorderOutlinedIcon from "@material-ui/icons/FavoriteBorderOutlined";
-// import CallSplitOutlinedIcon from "@material-ui/icons/CallSplitOutlined";
-// import Divider from "@material-ui/core/Divider";
 import PostAddOutlinedIcon from "@material-ui/icons/PostAddOutlined";
-import Grid from "@material-ui/core/Grid";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
 import EqualizerOutlinedIcon from "@material-ui/icons/EqualizerOutlined";
 import GroupAddOutlinedIcon from "@material-ui/icons/GroupAddOutlined";
@@ -22,7 +18,6 @@ import store from "../../Store/Store";
 import Tooltip from "@material-ui/core/Tooltip";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import PlayForWorkRoundedIcon from "@material-ui/icons/PlayForWorkRounded";
-import { withRouter } from "react-router";
 import ChildGroupsInfoTemplate from "./ChildGroupsInfoTemplate";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -32,6 +27,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
+import {updateGroupInfo} from '../../actions/Creators/index'
 
 const styles = makeStyles(theme => ({
   GroupsList: {
@@ -60,12 +56,12 @@ const styles = makeStyles(theme => ({
   }
 }));
 
-const GroupsListTemplate = props => {
+const GroupsListTemplate = (props,{updateGroupDetails}) => {
   const classes = styles();
   let history = useHistory();
   const [openChildGroupsInfoDialog, setChildGroupsInfoDialog] = useState(false);
   const [currentGroup, setCurrentGroup] = useState({});
-  // console.log(history)
+  const [groupInfoFromChild, SetUpdatedGroupInfoFromChild] = useState({});
   const IconButtonItems = [
     {
       name: "ModifyChildGroups",
@@ -73,6 +69,7 @@ const GroupsListTemplate = props => {
       groupManagerAccess: true,
       showTooltip: true,
       click: groups => {
+        groups.handlerToUpdateParentState = { updatedGroupsData };
         setCurrentGroup(groups);
         setChildGroupsInfoDialog(true);
       }
@@ -134,6 +131,15 @@ const GroupsListTemplate = props => {
     setChildGroupsInfoDialog(false);
   };
 
+  const updatedGroupsData = updatedGroupInfo => {
+    SetUpdatedGroupInfoFromChild(updatedGroupInfo);
+  };
+
+  const handleSaveUpdatedGroupDetails = (e)=> {
+    e.preventDefault()
+    updateGroupDetails(groupInfoFromChild)
+  };
+  const handleClear = () => {};
   return (
     <div align="center" className={classes.GroupsList}>
       {GroupsInfo.map(groups => (
@@ -200,8 +206,8 @@ const GroupsListTemplate = props => {
           <ChildGroupsInfoTemplate {...currentGroup} />
         </DialogContent>
         <DialogActions>
-          <Button>Cancel</Button>
-          <Button>Save</Button>
+          <Button onClick={handleClear}>Cancel</Button>
+          <Button onClick={handleSaveUpdatedGroupDetails}>Save</Button>
         </DialogActions>
       </Dialog>
     </div>
@@ -215,7 +221,11 @@ const changeGroupChilds = (groups, event, history) => {
 };
 
 const setGroupChilds = groups => {
-  //console.log(groups)
 };
 
-export default withStyles(styles)(GroupsListTemplate);
+const mapDispatchToProps = dispatch =>({
+  updateGroupDetails: groupDetails =>{
+    dispatch(updateGroupInfo(groupDetails))
+  }
+})
+export default connect(null,mapDispatchToProps)(withStyles(styles)(GroupsListTemplate));

@@ -22,7 +22,6 @@ import SettingsBackupRestoreIcon from "@material-ui/icons/SettingsBackupRestore"
 import ContactMailOutlinedIcon from "@material-ui/icons/ContactMailOutlined";
 import ReactCardFlip from "react-card-flip";
 
-// import { useHistory } from "react-router-dom";
 const styles = makeStyles(theme => ({
   loginDiv: {
     paddingTop: "2%",
@@ -57,7 +56,8 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
   let userDetailsTemplate = {
     Username: "",
     Password: "",
-    doAPIcall: false
+    doUserAPICall: false,
+    doGroupsAPICall: false
   };
   let signupDetailsTemplate = {
     Username: "",
@@ -72,14 +72,17 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
     GroupInvites: [],
     GroupsInfo: []
   };
-  const [loginInfo, setUserName] = useState(userDetailsTemplate);
+  const [loginInfo, setUserInfo] = useState(userDetailsTemplate);
   const [UserDB, setUserDB] = useState({});
   const [flip, fliptoSignup] = React.useState(false);
   const [clear, setClear] = React.useState(false);
+  const [GroupsList, setGroupsList] = React.useState([]);
   const [signupInfo, setSignupInfo] = React.useState(signupDetailsTemplate);
   let history = useHistory();
-  const WorkSpaceConfig = JSON.parse(WorkSpaceList);
-  const GroupsList = WorkSpaceConfig.WorkSpace.Groups;
+  
+  // Use below for Local Data without MongoDB Atlas
+  // const WorkSpaceConfig = JSON.parse(WorkSpaceList);
+  // const GroupsList = WorkSpaceConfig.WorkSpace.Groups;
 
   //Map dosen't have the inbuild break so use for loop or some
   //use this Link for ref: https://www.codexpedia.com/javascript/javascript-loop-through-array-and-object-properties/
@@ -104,13 +107,21 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
       .get(`http://localhost:5000/Users/${loginInfo.Username}`)
       .then(res => setUserDB(res.data[0]))
       .catch(err => console.log(err));
-  }, [loginInfo.doAPIcall]);
+  }, [loginInfo.doUserAPICall]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/Groups/")
+      .then(res => setGroupsList(res.data))
+      .catch(err => console.log(err));
+  },[loginInfo.doGroupsAPICall]);
 
   const handleLoginSubmit = evt => {
     evt.preventDefault();
-    setUserName({ ...loginInfo, doAPIcall: true });
+    setUserInfo({ ...loginInfo, doUserAPICall: true });
     if (UserDB.Username && UserDB.Username === loginInfo.Username) {
       setUserDetails(UserDB);
+      setUserInfo({ ...loginInfo, doGroupsAPICall: true });
       let ProcessedData = GetUsersGroupData(GroupsList, UserDB.GroupID);
       setGroupsDetails(ProcessedData);
       history.push("/Home");
@@ -141,7 +152,7 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
             className={classes.TextField}
             placeholder="Enter Username"
             onChange={e =>
-              setUserName({ ...loginInfo, Username: e.target.value })
+              setUserInfo({ ...loginInfo, Username: e.target.value })
             }
             InputProps={{
               startAdornment: (
@@ -158,7 +169,7 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
             placeholder="Enter Psssword"
             className={classes.TextField}
             onChange={e =>
-              setUserName({ ...loginInfo, Password: e.target.value })
+              setUserInfo({ ...loginInfo, Password: e.target.value })
             }
             InputProps={{
               startAdornment: (

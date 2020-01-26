@@ -1,0 +1,15 @@
+@PriorityList
+#Update GroupList:
+  >> search users ---->Done
+  >> search Managers ----->Done
+  >> state managemnt and Reducer ---------> Pending 
+#Group Invites ---->Almost Done
+#Delete GroupList
+  >> if parent, delete corresponding childs
+  >> if child,pop to re-confirm
+#Navigate to particular child ---> Processing Finished
+  >> MenuItem or Dropdown with childs list ----> UI on going
+#Bookmark the Groups
+#Signup UI Change ------->Done
+#NewsFeed UI Modification and backend
+#Decision on chart and Transactions

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import Navbar from "./Navbar";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -15,6 +15,21 @@ import IconButton from "@material-ui/core/IconButton";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import CheckCircleOutlineOutlinedIcon from "@material-ui/icons/CheckCircleOutlineOutlined";
 import { green, red } from "@material-ui/core/colors";
+import CompleteGroups from "../../src/DataProcess/CompleteGroups";
+import FindMatchingGroup from "../DataProcess/FindMatchingGroup";
+import AddCircleOutlineOutlinedIcon from "@material-ui/icons/AddCircleOutlineOutlined";
+import { Tooltip } from "@material-ui/core";
+import axios from "axios";
+import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
+import SupervisedUserCircleOutlinedIcon from "@material-ui/icons/SupervisedUserCircleOutlined";
+import DnsOutlinedIcon from "@material-ui/icons/DnsOutlined";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import Typography from "@material-ui/core/Typography";
+import BusinessCenterOutlinedIcon from "@material-ui/icons/BusinessCenterOutlined";
+import TrendingUpOutlinedIcon from "@material-ui/icons/TrendingUpOutlined";
 
 const styles = makeStyles(theme => ({
   joinGroupDiv: {
@@ -32,14 +47,31 @@ const styles = makeStyles(theme => ({
     minWidth: "30vw",
     boxSizing: "border-box",
     backgroundColor: "#4e464605"
+  },
+  investmentStatusLoss: {
+    color: "Red"
+  },
+  investmentStatusProfit: {
+    color: "Green"
   }
 }));
 
 const JoinGroup = () => {
   const classes = styles();
+  const [chipValue, setChipValue] = React.useState("");
+  const [groupInfo, setGroupInfo] = React.useState({});
+  const [GroupsList, setGroupsList] = React.useState([]);
+  // let AllGroups=CompleteGroups();
   const isMobile = useMediaQuery("(min-width: 320px) and (max-width: 600px)");
   const UserGroupRequest = store.getState().userReducer.UserInfo.GroupInvites;
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/Groups/")
+      .then(res => setGroupsList(CompleteGroups(res.data)))
+      .catch(err => console.log(err));
+  }, [chipValue]);
 
+  const sendGroupInvite = () => {};
   return (
     <div align="center">
       {isMobile && isMobile ? <Navbar /> : <NavbarDesktop />}
@@ -76,7 +108,87 @@ const JoinGroup = () => {
             ))}
         </div>
         <div className={classes.reqDiv}>
-          <p>Search Options</p>
+          <Typography>Search Groups Here:</Typography>
+          <div style={{ display: "flex" }}>
+            <Autocomplete
+              options={GroupsList.map(option => option.GroupName)}
+              disableOpenOnFocus
+              onChange={(e, value) => {
+                setChipValue(value);
+                setGroupInfo(FindMatchingGroup(GroupsList, value));
+              }}
+              renderInput={params => (
+                <TextField
+                  placeholder="Search with Group Name"
+                  {...params}
+                  style={{ width: "20vw", marginTop: "6%", marginLeft: "8%" }}
+                />
+              )}
+            />
+            <Tooltip title="Send Join Request">
+              <IconButton
+                style={{ marginTop: "3%", marginLeft: "10%", color: "Black" }}
+                onClikc={() => sendGroupInvite()}
+              >
+                <AddCircleOutlineOutlinedIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
+          {chipValue && chipValue.length !== "" ? (
+            <div>
+              <List>
+                <ListItem>
+                  <b>
+                    <i> Search Results: </i>
+                  </b>
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <AccountCircle />
+                  </ListItemIcon>
+                  Group Name:
+                  {groupInfo && groupInfo.GroupName}
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <DnsOutlinedIcon />
+                  </ListItemIcon>
+                  Group Id:
+                  {groupInfo && groupInfo.GroupId}
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon
+                    className={
+                      groupInfo && groupInfo.InvestmentStatus === "Profit"
+                        ? classes.investmentStatusProfit
+                        : classes.investmentStatusLoss
+                    }
+                  >
+                    <TrendingUpOutlinedIcon />
+                  </ListItemIcon>
+                  Group Status: {groupInfo && groupInfo.InvestmentStatus}
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <AttachMoneyIcon />
+                  </ListItemIcon>
+                  Group Scale: {groupInfo && groupInfo.GroupScale}
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <BusinessCenterOutlinedIcon />
+                  </ListItemIcon>
+                  Business Name: {groupInfo && groupInfo.BusinessName}
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <SupervisedUserCircleOutlinedIcon />
+                  </ListItemIcon>
+                  Total Members:<i> {groupInfo && groupInfo.TotalMembers}</i>
+                </ListItem>
+              </List>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

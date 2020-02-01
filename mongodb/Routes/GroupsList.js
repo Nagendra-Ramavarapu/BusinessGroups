@@ -62,4 +62,28 @@ router.route("/NewGroup").post((req, res) => {
     .catch(err => res.status(400).json("Error:" + err));
 });
 
+router.route("/update/:id").post((req, res) => {
+  Groups.findById(req.params.id)
+    .then(group => {
+      (group.GroupId = req.body.GroupId),
+        (group.GroupName = req.body.GroupName),
+        (group.GroupPassword = req.body.GroupPassword),
+        (group.CompleteGroupChilds = req.body.CompleteGroupChilds),
+        (group.GroupConfig = req.body.GroupConfig),
+        (group.ChildConfig = req.body.ChildConfig),
+        (group.ChildGroup = req.body.ChildGroup);
+      group
+        .save()
+        .then(() => res.json("Group Updated"))
+        .catch(err => res.status(400).json("Error:", err));
+    })
+    .catch(err => res.status(400).json("Error:", err));
+});
+
+router.route("/delete/:id").delete((req, res) => {
+  Groups.findByIdAndDelete(req.params.id)
+    .then(() => res.json("Group Deleted"))
+    .catch(err => res.status(400).json("Error:" + err));
+});
+
 module.exports = router;

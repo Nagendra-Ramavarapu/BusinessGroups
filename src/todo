@@ -1,15 +1,26 @@
-@PriorityList
-#Update GroupList:
-  >> search users ---->Done
-  >> search Managers ----->Done
-  >> state managemnt and Reducer ---------> Pending 
-#Group Invites ---->Almost Done
-#Delete GroupList
-  >> if parent, delete corresponding childs
-  >> if child,pop to re-confirm
-#Navigate to particular child ---> Processing Finished
-  >> MenuItem or Dropdown with childs list ----> UI on going
-#Bookmark the Groups
-#Signup UI Change ------->Done
-#NewsFeed UI Modification and backend
-#Decision on chart and Transactions
+@PriorityQueue:
+--------------> 1. Finish Create Group <--------------------
+--------------> 2. Finish Update Group <--------------------
+--------------> 3. Finish Delete Group <--------------------
+
+@ItemsList:
+#Login: Template and MongoDBFinished
+#Signup: Template and MongoDB Finished 
+#Home
+  >> #Favourites:
+  >> #RecentlyVisited:
+#Create Group:
+  >> Template Finished 
+  >> Need to do MongoDB 
+#Update Group:
+  >> Template Finished 
+  >> Need to do MongoDB 
+#Join Group:
+  >> Template Finished
+  >> MongoDB Pending
+#Move to Child: -----------------> Processing Pending
+#Delete Group: ------------------> Not started 
+#Transactions: ------------------> Not started 
+#NewsFeed: ----------------------> Not started 
+#Predict Business: --------------> Not started 
+#Profile Details: ---------------> Not started 

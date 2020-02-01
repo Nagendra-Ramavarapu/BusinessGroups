@@ -30,6 +30,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import Typography from "@material-ui/core/Typography";
 import BusinessCenterOutlinedIcon from "@material-ui/icons/BusinessCenterOutlined";
 import TrendingUpOutlinedIcon from "@material-ui/icons/TrendingUpOutlined";
+import Apptheme from "./AppStylings/Apptheme";
 
 const styles = makeStyles(theme => ({
   joinGroupDiv: {
@@ -53,6 +54,13 @@ const styles = makeStyles(theme => ({
   },
   investmentStatusProfit: {
     color: "Green"
+  },
+  Icons: {
+    color: Apptheme.color.PrimaryColor
+  },
+  avatar:{
+    color:Apptheme.avatar.color,
+    background:Apptheme.avatar.backgroundColor
   }
 }));
 
@@ -61,7 +69,6 @@ const JoinGroup = () => {
   const [chipValue, setChipValue] = React.useState("");
   const [groupInfo, setGroupInfo] = React.useState({});
   const [GroupsList, setGroupsList] = React.useState([]);
-  // let AllGroups=CompleteGroups();
   const isMobile = useMediaQuery("(min-width: 320px) and (max-width: 600px)");
   const UserGroupRequest = store.getState().userReducer.UserInfo.GroupInvites;
   useEffect(() => {
@@ -85,22 +92,19 @@ const JoinGroup = () => {
         }
       >
         <div className={classes.reqDiv}>
-          <p>Join Requests</p>
-
-          {console.log(UserGroupRequest)}
+          <p className={classes.Icons}>Join Requests</p>
           {UserGroupRequest &&
             UserGroupRequest.map(Group => (
-              //<h1></h1>
               <List>
                 <ListItem>
                   <ListItemAvatar>
-                    <Avatar>{Group.GroupId.charAt(0)}</Avatar>
+                    <Avatar className={classes.avatar}>{Group.GroupId.charAt(0)}</Avatar>
                   </ListItemAvatar>
                   <ListItem>{Group.GroupName}</ListItem>
                   <IconButton style={{ color: green[500] }}>
                     <CheckCircleOutlineOutlinedIcon />
                   </IconButton>
-                  <IconButton style={{ color: red[500] }}>
+                  <IconButton className={classes.Icons}>
                     <CancelOutlinedIcon />
                   </IconButton>
                 </ListItem>
@@ -108,7 +112,7 @@ const JoinGroup = () => {
             ))}
         </div>
         <div className={classes.reqDiv}>
-          <Typography>Search Groups Here:</Typography>
+          <Typography className={classes.Icons}>Search Groups Here:</Typography>
           <div style={{ display: "flex" }}>
             <Autocomplete
               options={GroupsList.map(option => option.GroupName)}
@@ -121,6 +125,7 @@ const JoinGroup = () => {
                 <TextField
                   placeholder="Search with Group Name"
                   {...params}
+                  
                   style={{ width: "20vw", marginTop: "6%", marginLeft: "8%" }}
                 />
               )}
@@ -130,7 +135,7 @@ const JoinGroup = () => {
                 style={{ marginTop: "3%", marginLeft: "10%", color: "Black" }}
                 onClikc={() => sendGroupInvite()}
               >
-                <AddCircleOutlineOutlinedIcon />
+                <AddCircleOutlineOutlinedIcon className={classes.Icons}/>
               </IconButton>
             </Tooltip>
           </div>
@@ -138,20 +143,20 @@ const JoinGroup = () => {
             <div>
               <List>
                 <ListItem>
-                  <b>
+                  <b className={classes.Icons}>
                     <i> Search Results: </i>
                   </b>
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <AccountCircle />
+                    <AccountCircle className={classes.Icons}/>
                   </ListItemIcon>
                   Group Name:
                   {groupInfo && groupInfo.GroupName}
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <DnsOutlinedIcon />
+                    <DnsOutlinedIcon className={classes.Icons}/>
                   </ListItemIcon>
                   Group Id:
                   {groupInfo && groupInfo.GroupId}
@@ -164,25 +169,25 @@ const JoinGroup = () => {
                         : classes.investmentStatusLoss
                     }
                   >
-                    <TrendingUpOutlinedIcon />
+                    <TrendingUpOutlinedIcon className={classes.Icons}/>
                   </ListItemIcon>
                   Group Status: {groupInfo && groupInfo.InvestmentStatus}
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <AttachMoneyIcon />
+                    <AttachMoneyIcon className={classes.Icons}/>
                   </ListItemIcon>
                   Group Scale: {groupInfo && groupInfo.GroupScale}
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <BusinessCenterOutlinedIcon />
+                    <BusinessCenterOutlinedIcon className={classes.Icons}/>
                   </ListItemIcon>
                   Business Name: {groupInfo && groupInfo.BusinessName}
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <SupervisedUserCircleOutlinedIcon />
+                    <SupervisedUserCircleOutlinedIcon className={classes.Icons}/>
                   </ListItemIcon>
                   Total Members:<i> {groupInfo && groupInfo.TotalMembers}</i>
                 </ListItem>

@@ -16,6 +16,7 @@ import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
 import { addNewGroupDetails } from "../actions/Creators/index";
 import AccountTreeOutlinedIcon from '@material-ui/icons/AccountTreeOutlined';
+import Apptheme from "./AppStylings/Apptheme";
 
 const styles = makeStyles(theme => ({
   bot: {
@@ -28,11 +29,18 @@ const styles = makeStyles(theme => ({
   },
   TextField: {
     margin: 5
-    //padding: "1%"
+  },
+  Icons: {
+    color: Apptheme.color.PrimaryColor
+  },
+  avatar:{
+    color:Apptheme.avatar.color,
+    background:Apptheme.avatar.backgroundColor
   }
 }));
 const CreateGroup = ({ addNewGroupDetails }) => {
   const classes = styles();
+  const [isButtonHovered,setButtonHovered]=React.useState(false)
   let history = useHistory();
   let initGroupConfig = {
     GroupId: "",
@@ -101,11 +109,10 @@ const CreateGroup = ({ addNewGroupDetails }) => {
     for (let i = 0; i < groupConfig.ChildConfig.childGroupsCount; i++) {
       groupConfig.ChildGroup.push(SampleGroupConfig);
     }
-    console.log(groupConfig)
     addNewGroupDetails(groupConfig);
     history.push("/Home");
   };
-  //<pre/> tab spaces
+  //FYI: <pre/> tab spaces
   return (
     <div align="center">
       {isMobile && isMobile ? <Navbar /> : <NavbarDesktop />}
@@ -127,7 +134,7 @@ const CreateGroup = ({ addNewGroupDetails }) => {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <PeopleAltOutlinedIcon />
+              <PeopleAltOutlinedIcon className={classes.Icons}/>
             </InputAdornment>
           )
         }}
@@ -144,7 +151,7 @@ const CreateGroup = ({ addNewGroupDetails }) => {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <LockOutlinedIcon />
+              <LockOutlinedIcon className={classes.Icons}/>
             </InputAdornment>
           )
         }}
@@ -167,7 +174,7 @@ const CreateGroup = ({ addNewGroupDetails }) => {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <SupervisedUserCircleOutlinedIcon />
+              <SupervisedUserCircleOutlinedIcon className={classes.Icons}/>
             </InputAdornment>
           )
         }}
@@ -190,7 +197,7 @@ const CreateGroup = ({ addNewGroupDetails }) => {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <AccountTreeOutlinedIcon />
+              <AccountTreeOutlinedIcon className={classes.Icons}/>
             </InputAdornment>
           )
         }}
@@ -198,13 +205,14 @@ const CreateGroup = ({ addNewGroupDetails }) => {
       <br />
       <Button
         variant="contained"
-        className={classes.submitButton}
+        //className={isButtonHovered? classes.avatar:null}
         onClick={handleSubmit}
+        //onMouseOut={() => setButtonHovered(!isButtonHovered)}
+        //onMouseEnter ={()=>setButtonHovered(isButtonHovered)}
       >
         Submit
       </Button>
       <div className={classes.botDiv}>
-        {/* <p><i><b>Any queries,Tap me ....!</b></i></p> */}
         <Tooltip title={"I'm not configured yet...!"}>
           <Fab className={classes.botDiv}>
             <img className={classes.bot} src={Bot} />

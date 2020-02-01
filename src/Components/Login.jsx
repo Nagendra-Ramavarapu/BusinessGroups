@@ -21,6 +21,7 @@ import EmailOutlinedIcon from "@material-ui/icons/EmailOutlined";
 import SettingsBackupRestoreIcon from "@material-ui/icons/SettingsBackupRestore";
 import ContactMailOutlinedIcon from "@material-ui/icons/ContactMailOutlined";
 import ReactCardFlip from "react-card-flip";
+import Apptheme from './AppStylings/Apptheme'
 
 const styles = makeStyles(theme => ({
   loginDiv: {
@@ -29,10 +30,10 @@ const styles = makeStyles(theme => ({
   },
   TextField: {
     margin: 5,
-    padding: "1%"
+    padding: "1%",
   },
   signup: {
-    color: "#00cc00"
+    color: Apptheme.color.SecondaryColor
   },
   submitButton: {
     color: "#000000",
@@ -43,12 +44,12 @@ const styles = makeStyles(theme => ({
     height: 40,
     position: "absolute",
     float: "right"
-    // bottom: theme.spacing(2),
-    // right: theme.spacing(2),
   },
   SignupTextField: {
-    // margin: 2,
     padding: "0.5%"
+  },
+  Icons:{
+    color:Apptheme.color.PrimaryColor
   }
 }));
 const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
@@ -157,7 +158,7 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <AccountCircle />
+                  <AccountCircle className={classes.Icons} />
                 </InputAdornment>
               )
             }}
@@ -174,7 +175,7 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <LockOutlinedIcon />
+                  <LockOutlinedIcon className={classes.Icons}/>
                 </InputAdornment>
               )
             }}
@@ -208,7 +209,7 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <AccountCircle />
+                  <AccountCircle className={classes.Icons}/>
                 </InputAdornment>
               )
             }}
@@ -225,7 +226,7 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <EmailOutlinedIcon />
+                  <EmailOutlinedIcon className={classes.Icons}/>
                 </InputAdornment>
               )
             }}
@@ -242,7 +243,7 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <ContactMailOutlinedIcon />
+                  <ContactMailOutlinedIcon className={classes.Icons}/>
                 </InputAdornment>
               )
             }}
@@ -259,7 +260,7 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <LockOutlinedIcon />
+                  <LockOutlinedIcon className={classes.Icons}/>
                 </InputAdornment>
               )
             }}
@@ -273,7 +274,7 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SettingsBackupRestoreIcon />
+                  <SettingsBackupRestoreIcon className={classes.Icons}/>
                 </InputAdornment>
               )
             }}

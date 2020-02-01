@@ -14,6 +14,7 @@ import Chip from "@material-ui/core/Chip";
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import GroupAddRoundedIcon from "@material-ui/icons/GroupAddRounded";
 import axios from "axios";
+import Apptheme from "../AppStylings/Apptheme";
 
 /// TODO:
 //  1. Remove ClonedGroupInfo Dependencies in handlers
@@ -33,13 +34,15 @@ const styles = makeStyles(theme => ({
   childsDiv: {
     minWidth: "23vw",
     maxWidth: "30vw"
-    //display:'flex'
   },
   IndividualChild: {},
   fieldSet: {
-    borderColor: "pink",
+    borderColor: Apptheme.color.SecondaryColor,
     margin: "2%"
-  }
+  },
+  Icons: {
+    color: Apptheme.color.PrimaryColor
+  },
 }));
 const ChildGroupsInfoTemplate = groups => {
   const classes = styles();
@@ -172,7 +175,7 @@ const ChildGroupsInfoTemplate = groups => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <AccountCircle />
+                <AccountCircle className={classes.Icons}/>
               </InputAdornment>
             )
           }}
@@ -187,7 +190,7 @@ const ChildGroupsInfoTemplate = groups => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <LockOutlinedIcon />
+                <LockOutlinedIcon className={classes.Icons}/>
               </InputAdornment>
             )
           }}
@@ -201,7 +204,7 @@ const ChildGroupsInfoTemplate = groups => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <AccountTreeOutlinedIcon />
+                <AccountTreeOutlinedIcon className={classes.Icons}/>
               </InputAdornment>
             )
           }}
@@ -215,7 +218,7 @@ const ChildGroupsInfoTemplate = groups => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <AttachMoneyIcon />
+                <AttachMoneyIcon className={classes.Icons}/>
               </InputAdornment>
             )
           }}
@@ -229,13 +232,13 @@ const ChildGroupsInfoTemplate = groups => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <BusinessCenterOutlinedIcon />
+                <BusinessCenterOutlinedIcon className={classes.Icons}/>
               </InputAdornment>
             )
           }}
         />
         <br />
-        <HowToRegOutlinedIcon />
+        <HowToRegOutlinedIcon className={classes.Icons}/>
         <Autocomplete
           multiple
           options={UsersData.map(option => option.Username)}
@@ -248,6 +251,7 @@ const ChildGroupsInfoTemplate = groups => {
               <Chip
                 variant="outlined"
                 label={option}
+                className={classes.Icons}
                 {...getTagProps({ index })}
               />
             ))
@@ -257,7 +261,7 @@ const ChildGroupsInfoTemplate = groups => {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <LockOutlinedIcon />
+                    <LockOutlinedIcon className={classes.Icons}/>
                   </InputAdornment>
                 )
               }}
@@ -269,14 +273,14 @@ const ChildGroupsInfoTemplate = groups => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <HowToRegOutlinedIcon />
+                <HowToRegOutlinedIcon className={classes.Icons}/>
               </InputAdornment>
             )
           }}
         />
 
         <br />
-        <GroupAddRoundedIcon />
+        <GroupAddRoundedIcon className={classes.Icons}/>
         <Autocomplete
           multiple
           options={UsersData.map(option => option.Username)}
@@ -289,6 +293,7 @@ const ChildGroupsInfoTemplate = groups => {
               <Chip
                 variant="outlined"
                 label={option}
+                className={classes.Icons}
                 {...getTagProps({ index })}
               />
             ))
@@ -317,7 +322,7 @@ const ChildGroupsInfoTemplate = groups => {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <AccountCircle />
+                        <AccountCircle className={classes.Icons}/>
                       </InputAdornment>
                     )
                   }}
@@ -335,7 +340,7 @@ const ChildGroupsInfoTemplate = groups => {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <LockOutlinedIcon />
+                        <LockOutlinedIcon className={classes.Icons}/>
                       </InputAdornment>
                     )
                   }}
@@ -351,7 +356,7 @@ const ChildGroupsInfoTemplate = groups => {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <SupervisedUserCircleOutlinedIcon />
+                        <SupervisedUserCircleOutlinedIcon className={classes.Icons}/>
                       </InputAdornment>
                     )
                   }}
@@ -369,7 +374,7 @@ const ChildGroupsInfoTemplate = groups => {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <AccountTreeOutlinedIcon />
+                        <AccountTreeOutlinedIcon className={classes.Icons}/>
                       </InputAdornment>
                     )
                   }}

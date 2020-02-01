@@ -12,6 +12,7 @@ import HelpTwoToneIcon from "@material-ui/icons/HelpTwoTone";
 import FeedbackTwoToneIcon from "@material-ui/icons/FeedbackTwoTone";
 import SettingsTwoToneIcon from "@material-ui/icons/SettingsTwoTone";
 import ListIcon from '@material-ui/icons/List';
+import Apptheme from './AppStylings/Apptheme'
 
 const generalItems = [
     {
@@ -20,7 +21,7 @@ const generalItems = [
         if (!(history.location && history.location.pathname === "/Home"))
           history.push("/Home");
       },
-      icon: <HomeRoundedIcon />
+      icon: <HomeRoundedIcon style={{color:Apptheme.color.PrimaryColor}}/>
     },
     {
       name: "NewsFeed",
@@ -28,18 +29,15 @@ const generalItems = [
         if (!(history.location && history.location.pathname === "/NewsFeed"))
           history.push("/NewsFeed");
       },
-      icon: <ListIcon />
+      icon: <ListIcon style={{color:Apptheme.color.PrimaryColor}}/>
     },
-
-
-    
     {
       name: "Create group",
       click: history => {
         if (!(history.location && history.location.pathname === "/CreateGroup"))
           history.push("/CreateGroup");
       },
-      icon: <GroupAddRoundedIcon />
+      icon: <GroupAddRoundedIcon style={{color:Apptheme.color.PrimaryColor}}/>
     },
     {
       name: "Join Group",
@@ -47,12 +45,12 @@ const generalItems = [
         if (!(history.location && history.location.pathname === "/JoinGroup"))
           history.push("/JoinGroup");
       },
-      icon: <GroupRoundedIcon />
+      icon: <GroupRoundedIcon style={{color:Apptheme.color.PrimaryColor}}/>
     },
     {
       name: "Predict Business",
       click: () => {},
-      icon: <BusinessCenterTwoToneIcon />
+      icon: <BusinessCenterTwoToneIcon style={{color:Apptheme.color.PrimaryColor}}/>
     }
   ];
 
@@ -60,22 +58,22 @@ const generalItems = [
     {
       name: "About",
       click: () => {},
-      icon: <InfoTwoToneIcon />
+      icon: <InfoTwoToneIcon style={{color:Apptheme.color.PrimaryColor}}/>
     },
     {
       name: "Help",
       click: () => {},
-      icon: <HelpTwoToneIcon />
+      icon: <HelpTwoToneIcon style={{color:Apptheme.color.PrimaryColor}}/>
     },
     {
       name: "Feedback",
       click: () => {},
-      icon: <FeedbackTwoToneIcon />
+      icon: <FeedbackTwoToneIcon style={{color:Apptheme.color.PrimaryColor}}/>
     },
     {
       name: "Settings",
       click: () => {},
-      icon: <SettingsTwoToneIcon />
+      icon: <SettingsTwoToneIcon style={{color:Apptheme.color.PrimaryColor}}/>
     }
   ];
 
@@ -89,12 +87,12 @@ const generalItems = [
     {
       name:"Wallets",
       click: ()=>{},
-      icon:<AccountBalanceWalletOutlinedIcon/>
+      icon:<AccountBalanceWalletOutlinedIcon style={{color:Apptheme.color.PrimaryColor}}/>
     },
     {
       name:"Notifications",
       click: ()=>{},
-      icon:<NotificationsNoneRoundedIcon/>
+      icon:<NotificationsNoneRoundedIcon style={{color:Apptheme.color.PrimaryColor}}/>
     }
   ]
 

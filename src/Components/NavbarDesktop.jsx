@@ -4,7 +4,6 @@ import { makeStyles, withStyles, useTheme } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import Logo from "../Logo/logo3.png";
-import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles(theme => ({
   desktopNavButton: {

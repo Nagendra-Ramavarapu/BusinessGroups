@@ -27,36 +27,37 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
-import {updateGroupInfo} from '../../actions/Creators/index'
+import { updateGroupInfo } from "../../actions/Creators/index";
+import Apptheme from "../AppStylings/Apptheme";
 
 const styles = makeStyles(theme => ({
   GroupsList: {
-    // maxHeight: "32vh",
-    // minHeight: "15vh",
     minWidth: "25vw",
     marginTop: "3%",
     marginBottom: "3%",
     align: "Center"
-    //backgroundColor: "#4e464605"
-    // float: "right"
-    // paddingRight:"20%"
   },
   listItems: {
     minWidth: "50vw",
     maxWidth: "53vw",
     maxHeight: "15vh"
-    // overflowX: "auto",
-    // overflowy: "auto"
   },
   investmentStatusLoss: {
     color: "Red"
   },
   investmentStatusProfit: {
     color: "Green"
+  },
+  Icons: {
+    color: Apptheme.color.PrimaryColor
+  },
+  avatar:{
+    color:Apptheme.avatar.color,
+    background:Apptheme.avatar.backgroundColor
   }
 }));
 
-const GroupsListTemplate = (props,{updateGroupDetails}) => {
+const GroupsListTemplate = (props, { updateGroupDetails }) => {
   const classes = styles();
   let history = useHistory();
   const [openChildGroupsInfoDialog, setChildGroupsInfoDialog] = useState(false);
@@ -65,7 +66,7 @@ const GroupsListTemplate = (props,{updateGroupDetails}) => {
   const IconButtonItems = [
     {
       name: "ModifyChildGroups",
-      Icon: <GroupAddOutlinedIcon />,
+      Icon: <GroupAddOutlinedIcon className={classes.Icons} />,
       groupManagerAccess: true,
       showTooltip: true,
       click: groups => {
@@ -77,14 +78,14 @@ const GroupsListTemplate = (props,{updateGroupDetails}) => {
 
     {
       name: "Report",
-      Icon: <EqualizerOutlinedIcon />,
+      Icon: <EqualizerOutlinedIcon className={classes.Icons} />,
       groupManagerAccess: false,
       showTooltip: true,
       click: () => {}
     },
     {
       name: "PostTransactionUpdate",
-      Icon: <PostAddOutlinedIcon />,
+      Icon: <PostAddOutlinedIcon className={classes.Icons} />,
       groupManagerAccess: true,
       showTooltip: true,
       click: () => {}
@@ -98,28 +99,28 @@ const GroupsListTemplate = (props,{updateGroupDetails}) => {
     },
     {
       name: "Child Groups",
-      Icon: <PlayForWorkRoundedIcon />,
+      Icon: <PlayForWorkRoundedIcon className={classes.Icons} />,
       groupManagerAccess: false,
       showTooltip: true,
       click: () => {}
     },
     {
       name: "Bookmark",
-      Icon: <StarBorderIcon />,
+      Icon: <StarBorderIcon className={classes.Icons} />,
       groupManagerAccess: false,
       showTooltip: true,
       click: () => {}
     },
     {
       name: "Delete",
-      Icon: <DeleteOutlineOutlinedIcon />,
+      Icon: <DeleteOutlineOutlinedIcon className={classes.Icons} />,
       groupManagerAccess: true,
       showTooltip: true,
       click: () => {}
     },
     {
       name: "MoreItems",
-      Icon: <MoreVertOutlinedIcon />,
+      Icon: <MoreVertOutlinedIcon className={classes.Icons} />,
       groupManagerAccess: false,
       showTooltip: true,
       click: () => {}
@@ -135,9 +136,9 @@ const GroupsListTemplate = (props,{updateGroupDetails}) => {
     SetUpdatedGroupInfoFromChild(updatedGroupInfo);
   };
 
-  const handleSaveUpdatedGroupDetails = (e)=> {
-    e.preventDefault()
-    updateGroupDetails(groupInfoFromChild)
+  const handleSaveUpdatedGroupDetails = e => {
+    e.preventDefault();
+    updateGroupDetails(groupInfoFromChild);
   };
   const handleClear = () => {};
   return (
@@ -152,9 +153,11 @@ const GroupsListTemplate = (props,{updateGroupDetails}) => {
                 onClick={e => changeGroupChilds(groups, e, history)}
               >
                 <ListItemAvatar>
-                  <Avatar> {groups.GroupName.charAt(0)}</Avatar>
+                  <Avatar className={classes.avatar}> {groups.GroupName.charAt(0)}</Avatar>
                 </ListItemAvatar>
-                <ListItemText>{groups.GroupName}</ListItemText>
+                <ListItemText className={classes.Icons}>
+                  {groups.GroupName}
+                </ListItemText>
               </ListItem>
             </Tooltip>
             {IconButtonItems.map(buttons =>
@@ -220,12 +223,14 @@ const changeGroupChilds = (groups, event, history) => {
     : history.push(`/GroupsInfoTemplate/${groups.GroupId}`, groups);
 };
 
-const setGroupChilds = groups => {
-};
+const setGroupChilds = groups => {};
 
-const mapDispatchToProps = dispatch =>({
-  updateGroupDetails: groupDetails =>{
-    dispatch(updateGroupInfo(groupDetails))
+const mapDispatchToProps = dispatch => ({
+  updateGroupDetails: groupDetails => {
+    dispatch(updateGroupInfo(groupDetails));
   }
-})
-export default connect(null,mapDispatchToProps)(withStyles(styles)(GroupsListTemplate));
+});
+export default connect(
+  null,
+  mapDispatchToProps
+)(withStyles(styles)(GroupsListTemplate));

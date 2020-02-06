@@ -1,3 +1,6 @@
+TODO at Office:
+Date: 2nd Feb
+Task: Try to work on Maintaining Single Dialog for Entire Application(Transactions,Update GroupInfo,chart) 
 @PriorityQueue:
 --------------> 2. Finish Update Group <--------------------
 --------------> 3. Finish Delete Group <--------------------
@@ -17,7 +20,7 @@
 #Join Group:
   >> Template Finished
   >> MongoDB Pending
-#Move to Child: -----------------> Processing Pending
+-----------------> #Move to Child: -----------------> Completed
 #Delete Group: ------------------> Not started 
 #Transactions: ------------------> Not started 
 #NewsFeed: ----------------------> Not started 

@@ -58,9 +58,9 @@ const styles = makeStyles(theme => ({
   Icons: {
     color: Apptheme.color.PrimaryColor
   },
-  avatar:{
-    color:Apptheme.avatar.color,
-    background:Apptheme.avatar.backgroundColor
+  avatar: {
+    color: Apptheme.avatar.color,
+    background: Apptheme.avatar.backgroundColor
   }
 }));
 
@@ -71,6 +71,7 @@ const JoinGroup = () => {
   const [GroupsList, setGroupsList] = React.useState([]);
   const isMobile = useMediaQuery("(min-width: 320px) and (max-width: 600px)");
   const UserGroupRequest = store.getState().userReducer.UserInfo.GroupInvites;
+
   useEffect(() => {
     axios
       .get("http://localhost:5000/Groups/")
@@ -98,7 +99,9 @@ const JoinGroup = () => {
               <List>
                 <ListItem>
                   <ListItemAvatar>
-                    <Avatar className={classes.avatar}>{Group.GroupId.charAt(0)}</Avatar>
+                    <Avatar className={classes.avatar}>
+                      {Group.GroupId.charAt(0)}
+                    </Avatar>
                   </ListItemAvatar>
                   <ListItem>{Group.GroupName}</ListItem>
                   <IconButton style={{ color: green[500] }}>
@@ -125,7 +128,6 @@ const JoinGroup = () => {
                 <TextField
                   placeholder="Search with Group Name"
                   {...params}
-                  
                   style={{ width: "20vw", marginTop: "6%", marginLeft: "8%" }}
                 />
               )}
@@ -135,7 +137,7 @@ const JoinGroup = () => {
                 style={{ marginTop: "3%", marginLeft: "10%", color: "Black" }}
                 onClikc={() => sendGroupInvite()}
               >
-                <AddCircleOutlineOutlinedIcon className={classes.Icons}/>
+                <AddCircleOutlineOutlinedIcon className={classes.Icons} />
               </IconButton>
             </Tooltip>
           </div>
@@ -149,14 +151,14 @@ const JoinGroup = () => {
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <AccountCircle className={classes.Icons}/>
+                    <AccountCircle className={classes.Icons} />
                   </ListItemIcon>
                   Group Name:
                   {groupInfo && groupInfo.GroupName}
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <DnsOutlinedIcon className={classes.Icons}/>
+                    <DnsOutlinedIcon className={classes.Icons} />
                   </ListItemIcon>
                   Group Id:
                   {groupInfo && groupInfo.GroupId}
@@ -169,25 +171,27 @@ const JoinGroup = () => {
                         : classes.investmentStatusLoss
                     }
                   >
-                    <TrendingUpOutlinedIcon className={classes.Icons}/>
+                    <TrendingUpOutlinedIcon className={classes.Icons} />
                   </ListItemIcon>
                   Group Status: {groupInfo && groupInfo.InvestmentStatus}
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <AttachMoneyIcon className={classes.Icons}/>
+                    <AttachMoneyIcon className={classes.Icons} />
                   </ListItemIcon>
                   Group Scale: {groupInfo && groupInfo.GroupScale}
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <BusinessCenterOutlinedIcon className={classes.Icons}/>
+                    <BusinessCenterOutlinedIcon className={classes.Icons} />
                   </ListItemIcon>
                   Business Name: {groupInfo && groupInfo.BusinessName}
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
-                    <SupervisedUserCircleOutlinedIcon className={classes.Icons}/>
+                    <SupervisedUserCircleOutlinedIcon
+                      className={classes.Icons}
+                    />
                   </ListItemIcon>
                   Total Members:<i> {groupInfo && groupInfo.TotalMembers}</i>
                 </ListItem>

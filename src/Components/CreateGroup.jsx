@@ -15,8 +15,13 @@ import SupervisedUserCircleOutlinedIcon from "@material-ui/icons/SupervisedUserC
 import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
 import { addNewGroupDetails } from "../actions/Creators/index";
-import AccountTreeOutlinedIcon from '@material-ui/icons/AccountTreeOutlined';
+import AccountTreeOutlinedIcon from "@material-ui/icons/AccountTreeOutlined";
 import Apptheme from "./AppStylings/Apptheme";
+import axios from "axios";
+
+// TODO:
+// Make MongoDB and Redux in sync with one another
+// make use of async calls
 
 const styles = makeStyles(theme => ({
   bot: {
@@ -33,14 +38,14 @@ const styles = makeStyles(theme => ({
   Icons: {
     color: Apptheme.color.PrimaryColor
   },
-  avatar:{
-    color:Apptheme.avatar.color,
-    background:Apptheme.avatar.backgroundColor
+  avatar: {
+    color: Apptheme.avatar.color,
+    background: Apptheme.avatar.backgroundColor
   }
 }));
 const CreateGroup = ({ addNewGroupDetails }) => {
   const classes = styles();
-  const [isButtonHovered,setButtonHovered]=React.useState(false)
+  const [isButtonHovered, setButtonHovered] = React.useState(false);
   let history = useHistory();
   let initGroupConfig = {
     GroupId: "",
@@ -103,12 +108,17 @@ const CreateGroup = ({ addNewGroupDetails }) => {
   };
   const [groupConfig, setGroupConfig] = React.useState(initGroupConfig);
   const isMobile = useMediaQuery("(min-width: 320px) and (max-width: 600px)");
-  //const [isAllGroupsCreated, setGroupsCreationStatus] = React.useState(false);
 
   const handleSubmit = () => {
     for (let i = 0; i < groupConfig.ChildConfig.childGroupsCount; i++) {
       groupConfig.ChildGroup.push(SampleGroupConfig);
     }
+    axios
+      .post("http://localhost:5000/Groups/NewGroup", groupConfig)
+      .then(res =>
+        res.status === 200 ? alert("Data Added to MongoDB") : alert("Error !!!")
+      )
+      .catch(err => console.log(err));
     addNewGroupDetails(groupConfig);
     history.push("/Home");
   };
@@ -134,7 +144,7 @@ const CreateGroup = ({ addNewGroupDetails }) => {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <PeopleAltOutlinedIcon className={classes.Icons}/>
+              <PeopleAltOutlinedIcon className={classes.Icons} />
             </InputAdornment>
           )
         }}
@@ -151,7 +161,7 @@ const CreateGroup = ({ addNewGroupDetails }) => {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <LockOutlinedIcon className={classes.Icons}/>
+              <LockOutlinedIcon className={classes.Icons} />
             </InputAdornment>
           )
         }}
@@ -174,7 +184,7 @@ const CreateGroup = ({ addNewGroupDetails }) => {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <SupervisedUserCircleOutlinedIcon className={classes.Icons}/>
+              <SupervisedUserCircleOutlinedIcon className={classes.Icons} />
             </InputAdornment>
           )
         }}
@@ -197,7 +207,7 @@ const CreateGroup = ({ addNewGroupDetails }) => {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <AccountTreeOutlinedIcon className={classes.Icons}/>
+              <AccountTreeOutlinedIcon className={classes.Icons} />
             </InputAdornment>
           )
         }}

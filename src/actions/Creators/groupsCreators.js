@@ -10,12 +10,7 @@ export const addNewGroupDetails = groupConfig => ({
   payload: groupConfig
 });
 
-export const entireUserSpecificGroupDetails = groupsConfig => ({
-  type: groupsTypes.ADD_ENTIRE_USER_SPECIFIC_GROUP_DETAILS,
-  payload: groupsConfig
-});
-
-export const updateGroupInfo = groupInfo => ({
+export const updateGroupDetails = groupConfig => ({
   type: groupsTypes.UPDATE_GROUP_INFO,
-  payload: groupInfo
-});
+  payload: groupConfig
+})

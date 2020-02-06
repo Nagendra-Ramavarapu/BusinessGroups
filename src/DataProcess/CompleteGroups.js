@@ -1,3 +1,11 @@
+// This Function will return required GroupInfo for Search (i.e from All Available groups in MongoDB)
+// Inputs: All Groups from MongoDB 
+// Output: slicing all groups in required format
+// Helpful in search Groups Component
+// TODO:
+// 1. Check some Sub Groups are not coming in search 
+// 2. Dont show the Groups which user has access
+
 function ProcessGroups(Group, ProcessedInfo) {
     let requiredInfo = {
       GroupName: Group.GroupName,
@@ -10,13 +18,12 @@ function ProcessGroups(Group, ProcessedInfo) {
     ProcessedInfo.push(requiredInfo);
     if (Group.ChildConfig.hasChildGroup === "Yes") {
       Group.ChildGroup.map(child => {
-        return ProcessGroups(child, ProcessedInfo);
+        ProcessGroups(child, ProcessedInfo);
       });
     }
   }
   
   function CompleteGroups(GroupsList) {
-    console.log("In Complete Groups Function", GroupsList)
     let ProcessedInfo = [];
     GroupsList.map(Group => {
       ProcessGroups(Group, ProcessedInfo);

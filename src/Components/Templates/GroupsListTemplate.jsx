@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -27,9 +28,13 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
-import { updateGroupInfo } from "../../actions/Creators/index";
 import Apptheme from "../AppStylings/Apptheme";
-
+import { updateGroupDetails } from "../../actions/Creators/index";
+import FindCompleteGroupConfig from "../../DataProcess/FindCompleteGroupConfig";
+import FindAllchilds from "../../DataProcess/FindAllChilds";
+import Popover from "@material-ui/core/Popover";
+import MenuItem from "@material-ui/core/MenuItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
 const styles = makeStyles(theme => ({
   GroupsList: {
     minWidth: "25vw",
@@ -51,18 +56,21 @@ const styles = makeStyles(theme => ({
   Icons: {
     color: Apptheme.color.PrimaryColor
   },
-  avatar:{
-    color:Apptheme.avatar.color,
-    background:Apptheme.avatar.backgroundColor
+  avatar: {
+    color: Apptheme.avatar.color,
+    background: Apptheme.avatar.backgroundColor
   }
 }));
 
-const GroupsListTemplate = (props, { updateGroupDetails }) => {
+const GroupsListTemplate = props => {
   const classes = styles();
   let history = useHistory();
   const [openChildGroupsInfoDialog, setChildGroupsInfoDialog] = useState(false);
   const [currentGroup, setCurrentGroup] = useState({});
-  const [groupInfoFromChild, SetUpdatedGroupInfoFromChild] = useState({});
+  const [popoverAnchor, setPopoverAnchorPosition] = React.useState(null);
+  const [AllGroups, setAllGroups] = React.useState({});
+  const [popoverTemplate, setPopoverTemplate] = useState();
+  const [groupInfoFromChild, SetUpdatedGroupInfoFromChild] = useState(null);
   const IconButtonItems = [
     {
       name: "ModifyChildGroups",
@@ -102,7 +110,16 @@ const GroupsListTemplate = (props, { updateGroupDetails }) => {
       Icon: <PlayForWorkRoundedIcon className={classes.Icons} />,
       groupManagerAccess: false,
       showTooltip: true,
-      click: () => {}
+      click: (groups, e) => {
+        setPopoverAnchorPosition(e.target);
+        setAllGroups(
+          FindAllchilds(
+            store.getState().groupsReducer.GroupsInfo,
+            groups.GroupId
+          )
+        );
+        setCurrentGroup(groups);
+      }
     },
     {
       name: "Bookmark",
@@ -131,16 +148,37 @@ const GroupsListTemplate = (props, { updateGroupDetails }) => {
   const closeChildGroupsInfoDialog = () => {
     setChildGroupsInfoDialog(false);
   };
-
+  const closepopover = () => {
+    setPopoverAnchorPosition(null);
+  };
   const updatedGroupsData = updatedGroupInfo => {
     SetUpdatedGroupInfoFromChild(updatedGroupInfo);
   };
 
-  const handleSaveUpdatedGroupDetails = e => {
-    e.preventDefault();
-    updateGroupDetails(groupInfoFromChild);
+  const handleSaveUpdatedGroupDetails = () => {
+    //console.log("State Object after on submit:",groupInfoFromChild)
+    //console.log(props)
+
+    console.log(FindCompleteGroupConfig(
+      store.getState().groupsReducer.GroupsInfo,
+      groupInfoFromChild
+    ));
+    //props.updateGroupDetails(groupInfoFromChild)
+
+    setChildGroupsInfoDialog(false);
   };
-  const handleClear = () => {};
+  const handleClear = () => {
+    setChildGroupsInfoDialog(false);
+  };
+
+  useEffect(() => {
+    let clonedTemplate = [];
+    for (let group in AllGroups) {
+      clonedTemplate.push(AllGroups[group]);
+    }
+    setPopoverTemplate(clonedTemplate);
+  }, [AllGroups]);
+
   return (
     <div align="center" className={classes.GroupsList}>
       {GroupsInfo.map(groups => (
@@ -153,7 +191,10 @@ const GroupsListTemplate = (props, { updateGroupDetails }) => {
                 onClick={e => changeGroupChilds(groups, e, history)}
               >
                 <ListItemAvatar>
-                  <Avatar className={classes.avatar}> {groups.GroupName.charAt(0)}</Avatar>
+                  <Avatar className={classes.avatar}>
+                    {" "}
+                    {groups.GroupName.charAt(0)}
+                  </Avatar>
                 </ListItemAvatar>
                 <ListItemText className={classes.Icons}>
                   {groups.GroupName}
@@ -174,7 +215,7 @@ const GroupsListTemplate = (props, { updateGroupDetails }) => {
                       {buttons.Icon}
                     </IconButton>
                   ) : (
-                    <IconButton onClick={setGroupChilds(buttons.name, groups)}>
+                    <IconButton onClick={event => buttons.click(groups, event)}>
                       {" "}
                       {buttons.Icon}
                     </IconButton>
@@ -183,8 +224,8 @@ const GroupsListTemplate = (props, { updateGroupDetails }) => {
               ) : currentUserName === groups.GroupConfig.GroupManager ? (
                 <Tooltip title={buttons.name}>
                   <IconButton
-                    onClick={() => {
-                      buttons.click(groups);
+                    onClick={event => {
+                      buttons.click(groups, event);
                     }}
                   >
                     {buttons.Icon}
@@ -213,6 +254,33 @@ const GroupsListTemplate = (props, { updateGroupDetails }) => {
           <Button onClick={handleSaveUpdatedGroupDetails}>Save</Button>
         </DialogActions>
       </Dialog>
+      <Popover
+        open={Boolean(popoverAnchor)}
+        anchorEl={popoverAnchor}
+        onClose={closepopover}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right"
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right"
+        }}
+      >
+        {popoverTemplate &&
+          popoverTemplate.map(list =>
+            list.GroupId !== currentGroup.GroupId ? (
+              <MenuItem
+                onClick={event =>
+                  changeGroupChilds(list.GroupConfig, event, history)
+                }
+              >
+                <ListItemIcon>{list.GroupId}</ListItemIcon>
+                <ListItemText>{list.GroupName}</ListItemText>
+              </MenuItem>
+            ) : null
+          )}
+      </Popover>
     </div>
   );
 };
@@ -226,8 +294,8 @@ const changeGroupChilds = (groups, event, history) => {
 const setGroupChilds = groups => {};
 
 const mapDispatchToProps = dispatch => ({
-  updateGroupDetails: groupDetails => {
-    dispatch(updateGroupInfo(groupDetails));
+  updateGroupDetails: setGroupDetails => {
+    dispatch(updateGroupDetails(setGroupDetails));
   }
 });
 export default connect(

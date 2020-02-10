@@ -10,6 +10,7 @@ const NewsFeedSchema = new Schema(
         PostedOn:{type:Date},
         PostedBy:{type:String},
         Likes:{type:Number},
+        LikedBy:{type:Array},
         CommentsCount:{type:Number},
         Comments:[
             {

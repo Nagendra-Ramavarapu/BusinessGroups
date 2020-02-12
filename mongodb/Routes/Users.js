@@ -8,9 +8,28 @@ router.route("/").get((req, res) => {
 });
 
 router.route("/:Username").get((req, res) => {
-  User.find({"Username":req.params.Username})
+  User.find({ Username: req.params.Username })
     .then(users => res.json(users))
     .catch(err => res.status(400).json("Error:" + err));
+});
+
+router.route("/Add/Fav/").post((req, res) => {
+  User.updateOne(
+    { _id: req.body._id },
+    { $push: { FavGroupsInfo: req.body.FavGroupsInfo } }
+  )
+    .then(() => res.json("Fav Group Added ...!!"))
+    .catch(err => res.status(400).json("Error:", err));
+});
+
+router.route("/Remove/Fav/").delete((req, res) => {
+  User.findByIdAndDelete(
+    { _id: req.body._id },
+    { $pull: { FavGroupsInfo: req.body.FavGroupsInfo } },
+    { safe: true, upsert: true }
+  )
+    .then(() => res.json("Fav Group Deleted ...!!"))
+    .catch(err => res.status(400).json("Error:", err));
 });
 
 router.route("/SignUp").post((req, res) => {
@@ -24,8 +43,8 @@ router.route("/SignUp").post((req, res) => {
   const Email = req.body.Email;
   const GroupManagerRequests = req.body.GroupManagerRequests;
   const GroupRequests = req.body.GroupRequests;
-  const GroupInvites= req.body.GroupInvites;
-  const GroupsInfo = req.body.GroupsInfo;
+  const GroupInvites = req.body.GroupInvites;
+  const FavGroupsInfo = req.body.FavGroupsInfo;
 
   const newUser = new User({
     Username: Username,
@@ -33,13 +52,13 @@ router.route("/SignUp").post((req, res) => {
     Name: Name,
     Gender: Gender,
     Wallet: Wallet,
-    GroupID:GroupID,
+    GroupID: GroupID,
     ContactNumber: ContactNumber,
-    Email:Email,
-    GroupManagerRequests:GroupManagerRequests,
-    GroupRequests:GroupRequests,
-    GroupInvites:GroupInvites,
-    GroupsInfo: GroupsInfo
+    Email: Email,
+    GroupManagerRequests: GroupManagerRequests,
+    GroupRequests: GroupRequests,
+    GroupInvites: GroupInvites,
+    FavGroupsInfo: FavGroupsInfo
   });
   newUser
     .save()

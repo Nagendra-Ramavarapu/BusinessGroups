@@ -59,6 +59,14 @@ const styles = makeStyles(theme => ({
   avatar: {
     color: Apptheme.avatar.color,
     background: Apptheme.avatar.backgroundColor
+  },
+  favDiv: {
+    marginTop: "4%",
+    marginLeft: "4%",
+    marginBottom: "1%",
+    display: "flex",
+    maxWidth: "50vw",
+    minWidth: "50vw"
   }
 }));
 
@@ -77,6 +85,7 @@ const GroupsListTemplate = props => {
       Icon: <GroupAddOutlinedIcon className={classes.Icons} />,
       groupManagerAccess: true,
       showTooltip: true,
+      showOnFav: false,
       click: groups => {
         groups.handlerToUpdateParentState = { updatedGroupsData };
         setCurrentGroup(groups);
@@ -89,6 +98,7 @@ const GroupsListTemplate = props => {
       Icon: <EqualizerOutlinedIcon className={classes.Icons} />,
       groupManagerAccess: false,
       showTooltip: true,
+      showOnFav: true,
       click: () => {}
     },
     {
@@ -96,6 +106,7 @@ const GroupsListTemplate = props => {
       Icon: <PostAddOutlinedIcon className={classes.Icons} />,
       groupManagerAccess: true,
       showTooltip: true,
+      showOnFav: false,
       click: () => {}
     },
     {
@@ -103,6 +114,7 @@ const GroupsListTemplate = props => {
       Icon: <TrendingUpOutlinedIcon />,
       groupManagerAccess: false,
       showTooltip: true,
+      showOnFav: true,
       click: () => {}
     },
     {
@@ -110,6 +122,7 @@ const GroupsListTemplate = props => {
       Icon: <PlayForWorkRoundedIcon className={classes.Icons} />,
       groupManagerAccess: false,
       showTooltip: true,
+      showOnFav: false,
       click: (groups, e) => {
         setPopoverAnchorPosition(e.target);
         setAllGroups(
@@ -126,6 +139,7 @@ const GroupsListTemplate = props => {
       Icon: <StarBorderIcon className={classes.Icons} />,
       groupManagerAccess: false,
       showTooltip: true,
+      showOnFav: true,
       click: () => {}
     },
     {
@@ -133,6 +147,7 @@ const GroupsListTemplate = props => {
       Icon: <DeleteOutlineOutlinedIcon className={classes.Icons} />,
       groupManagerAccess: true,
       showTooltip: true,
+      showOnFav: false,
       click: () => {}
     },
     {
@@ -140,11 +155,13 @@ const GroupsListTemplate = props => {
       Icon: <MoreVertOutlinedIcon className={classes.Icons} />,
       groupManagerAccess: false,
       showTooltip: true,
+      showOnFav: false,
       click: () => {}
     }
   ];
   let GroupsInfo = props.groupsInfo;
   let currentUserName = store.getState().userReducer.UserInfo.Username;
+  let userFavGroups = store.getState().userReducer.UserInfo.FavGroupsInfo;
   const closeChildGroupsInfoDialog = () => {
     setChildGroupsInfoDialog(false);
   };
@@ -159,10 +176,12 @@ const GroupsListTemplate = props => {
     //console.log("State Object after on submit:",groupInfoFromChild)
     //console.log(props)
 
-    console.log(FindCompleteGroupConfig(
-      store.getState().groupsReducer.GroupsInfo,
-      groupInfoFromChild
-    ));
+    console.log(
+      FindCompleteGroupConfig(
+        store.getState().groupsReducer.GroupsInfo,
+        groupInfoFromChild
+      )
+    );
     //props.updateGroupDetails(groupInfoFromChild)
 
     setChildGroupsInfoDialog(false);
@@ -180,107 +199,150 @@ const GroupsListTemplate = props => {
   }, [AllGroups]);
 
   return (
-    <div align="center" className={classes.GroupsList}>
-      {GroupsInfo.map(groups => (
-        <List className={classes.listItems}>
-          <ListItem>
-            <Tooltip title={groups.GroupName}>
-              <ListItem
-                key={groups.GroupId}
-                button
-                onClick={e => changeGroupChilds(groups, e, history)}
+    <div align="center">
+      <div align="center" className={classes.favDiv}>
+        {userFavGroups.map(group => (
+          <div
+            style={{
+              borderStyle: "groove",
+              borderRadius: "15px",
+              marginRight: "1%",
+              minWidth: "10vw",
+              maxWidth: "10vw",
+              height: "25vh"
+            }}
+          >
+            <p>{group.GroupName}</p>
+            <Tooltip title={group.GroupName}>
+              <Avatar
+                className={classes.avatar}
+                style={{ align: "center" }}
+                key={group.GroupId}
+                variant="rounded"
               >
-                <ListItemAvatar>
-                  <Avatar className={classes.avatar}>
-                    {" "}
-                    {groups.GroupName.charAt(0)}
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText className={classes.Icons}>
-                  {groups.GroupName}
-                </ListItemText>
-              </ListItem>
+                {group.GroupName.charAt(0)}
+              </Avatar>
             </Tooltip>
-            {IconButtonItems.map(buttons =>
-              !buttons.groupManagerAccess ? (
-                <Tooltip title={buttons.name}>
-                  {buttons.name === "BusinessLine" ? (
+            <div style={{ display: "flex" }}>
+              {IconButtonItems.map(favIcons =>
+                favIcons.showOnFav === true ? (
+                  <IconButton
+                    size="small"
+                    style={{ marginLeft: 2, marginRight: 5, marginTop: 25 }}
+                    className={classes.appColorPrimary}
+                  >
+                    {favIcons.Icon}
+                  </IconButton>
+                ) : null
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div align="center" className={classes.GroupsList}>
+        {GroupsInfo.map(groups => (
+          <List className={classes.listItems}>
+            <ListItem>
+              <Tooltip title={groups.GroupName}>
+                <ListItem
+                  key={groups.GroupId}
+                  button
+                  onClick={e => changeGroupChilds(groups, e, history)}
+                >
+                  <ListItemAvatar>
+                    <Avatar className={classes.avatar}>
+                      {" "}
+                      {groups.GroupName.charAt(0)}
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText className={classes.Icons}>
+                    {groups.GroupName}
+                  </ListItemText>
+                </ListItem>
+              </Tooltip>
+              {IconButtonItems.map(buttons =>
+                !buttons.groupManagerAccess ? (
+                  <Tooltip title={buttons.name}>
+                    {buttons.name === "BusinessLine" ? (
+                      <IconButton
+                        className={
+                          groups.GroupConfig.InvestmentStatus === "Loss"
+                            ? classes.investmentStatusLoss
+                            : classes.investmentStatusProfit
+                        }
+                      >
+                        {buttons.Icon}
+                      </IconButton>
+                    ) : (
+                      <IconButton
+                        onClick={event => buttons.click(groups, event)}
+                      >
+                        {" "}
+                        {buttons.Icon}
+                      </IconButton>
+                    )}
+                  </Tooltip>
+                ) : currentUserName === groups.GroupConfig.GroupManager ? (
+                  <Tooltip title={buttons.name}>
                     <IconButton
-                      className={
-                        groups.GroupConfig.InvestmentStatus === "Loss"
-                          ? classes.investmentStatusLoss
-                          : classes.investmentStatusProfit
-                      }
+                      onClick={event => {
+                        buttons.click(groups, event);
+                      }}
                     >
                       {buttons.Icon}
                     </IconButton>
-                  ) : (
-                    <IconButton onClick={event => buttons.click(groups, event)}>
-                      {" "}
-                      {buttons.Icon}
-                    </IconButton>
-                  )}
-                </Tooltip>
-              ) : currentUserName === groups.GroupConfig.GroupManager ? (
-                <Tooltip title={buttons.name}>
-                  <IconButton
-                    onClick={event => {
-                      buttons.click(groups, event);
-                    }}
-                  >
-                    {buttons.Icon}
-                  </IconButton>
-                </Tooltip>
+                  </Tooltip>
+                ) : null
+              )}
+            </ListItem>
+          </List>
+        ))}
+        <Dialog
+          open={openChildGroupsInfoDialog}
+          onClose={closeChildGroupsInfoDialog}
+        >
+          <DialogTitle id="form-dialog-title">
+            Edit {currentGroup.GroupName} Sub Groups Info
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Note: This is Edit Panel,Change details only if required
+            </DialogContentText>
+            <ChildGroupsInfoTemplate {...currentGroup} />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClear}>Cancel</Button>
+            <Button onClick={handleSaveUpdatedGroupDetails}>Save</Button>
+          </DialogActions>
+        </Dialog>
+        <Popover
+          open={Boolean(popoverAnchor)}
+          anchorEl={popoverAnchor}
+          onClose={closepopover}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right"
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right"
+          }}
+        >
+          {popoverTemplate &&
+            popoverTemplate.map(list =>
+              list.GroupId !== currentGroup.GroupId ? (
+                <MenuItem
+                  onClick={event =>
+                    changeGroupChilds(list.GroupConfig, event, history)
+                  }
+                >
+                  <ListItemIcon>{list.GroupId}</ListItemIcon>
+                  <ListItemText>{list.GroupName}</ListItemText>
+                </MenuItem>
               ) : null
             )}
-          </ListItem>
-        </List>
-      ))}
-      <Dialog
-        open={openChildGroupsInfoDialog}
-        onClose={closeChildGroupsInfoDialog}
-      >
-        <DialogTitle id="form-dialog-title">
-          Edit {currentGroup.GroupName} Sub Groups Info
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Note: This is Edit Panel,Change details only if required
-          </DialogContentText>
-          <ChildGroupsInfoTemplate {...currentGroup} />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClear}>Cancel</Button>
-          <Button onClick={handleSaveUpdatedGroupDetails}>Save</Button>
-        </DialogActions>
-      </Dialog>
-      <Popover
-        open={Boolean(popoverAnchor)}
-        anchorEl={popoverAnchor}
-        onClose={closepopover}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right"
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right"
-        }}
-      >
-        {popoverTemplate &&
-          popoverTemplate.map(list =>
-            list.GroupId !== currentGroup.GroupId ? (
-              <MenuItem
-                onClick={event =>
-                  changeGroupChilds(list.GroupConfig, event, history)
-                }
-              >
-                <ListItemIcon>{list.GroupId}</ListItemIcon>
-                <ListItemText>{list.GroupName}</ListItemText>
-              </MenuItem>
-            ) : null
-          )}
-      </Popover>
+        </Popover>
+      </div>
     </div>
   );
 };

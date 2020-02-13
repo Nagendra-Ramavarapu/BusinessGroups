@@ -16,16 +16,16 @@ router.route("/:Username").get((req, res) => {
 router.route("/Add/Fav/").post((req, res) => {
   User.updateOne(
     { _id: req.body._id },
-    { $push: { FavGroupsInfo: req.body.FavGroupsInfo } }
+    { $push: { FavGroupsInfo: [req.body.GroupConfig] } }
   )
     .then(() => res.json("Fav Group Added ...!!"))
     .catch(err => res.status(400).json("Error:", err));
 });
 
-router.route("/Remove/Fav/").delete((req, res) => {
-  User.findByIdAndDelete(
+router.route("/Remove/Fav/").post((req, res) => {
+  User.updateOne(
     { _id: req.body._id },
-    { $pull: { FavGroupsInfo: req.body.FavGroupsInfo } },
+    { $pull: { FavGroupsInfo: { GroupId: req.body.GroupId } } },
     { safe: true, upsert: true }
   )
     .then(() => res.json("Fav Group Deleted ...!!"))

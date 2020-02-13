@@ -20,7 +20,7 @@ const userSchema = new Schema(
     GroupManagerRequests:{type:Array},
     GroupRequests:{type:Array},
     GroupInvites:{type:Array},
-    FavGroupsInfo: { type: [String] },
+    FavGroupsInfo: { type: [Object] },
   },
   {
     timestamps: true

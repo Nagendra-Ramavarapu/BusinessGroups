@@ -5,4 +5,13 @@ export const setUserDetails = userInfo => ({
   payload: userInfo
 });
 
+export const deleteFavGroup = favGroup => ({
+  type: userTypes.DELETE_FAV_GROUP,
+  payload: favGroup
+})
+export const addFavGroup = favGroup => ({
+  type: userTypes.ADD_FAV_GROUP,
+  payload:favGroup
+})
+
 

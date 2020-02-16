@@ -9,7 +9,6 @@ export default (state = initialState, action) => {
 
   switch (action.type) {
     case groupsTypes.SET_GROUP_DETAILS: {
-      console.log("Entered Reducer",state)
       state = { GroupsInfo: action.payload };
       return state;
     }
@@ -19,10 +18,10 @@ export default (state = initialState, action) => {
       });
     }
     case groupsTypes.UPDATE_GROUP_INFO: {
-      console.log("From Reducer:",state.GroupsInfo)
-      return state
-      }
-    
+      console.log("From Reducer:", state.GroupsInfo);
+      return state;
+    }
+
     default:
       return state;
   }

@@ -98,7 +98,7 @@ const NewsFeed = () => {
   const [isPostReady, setPostStatus] = useState(false);
   const [newsfeedMessage, setMessage] = useState("");
   let NewsFeedConfig = {
-    PostId: "poqqiiewe",
+    PostId: "poqqiiewqwqe",
     GroupID: ["H1"],
     UserId: "",
     Message: "",
@@ -119,7 +119,7 @@ const NewsFeed = () => {
           : console.log(res.status, res.statusText)
       )
       .catch(err => console.log(err));
-  });
+  },[]);
 
   const postMessage = async () => {
     NewsFeedConfig = {
@@ -138,7 +138,8 @@ const NewsFeed = () => {
     let requiredDateFormat =
       standardDate.getUTCDate() +
       "/" +
-      standardDate.getUTCMonth()+2 +
+      standardDate.getUTCMonth() +
+      2 +
       "/" +
       standardDate.getUTCFullYear();
     return requiredDateFormat;
@@ -172,10 +173,12 @@ const NewsFeed = () => {
               marginTop: "7%"
             }}
           >
-            {newsfeedMessage !== "" ? <IconButton>
-            {" "}
-            <PlayForWorkRoundedIcon className={classes.Icons}  />
-          </IconButton> : null}
+            {newsfeedMessage !== "" ? (
+              <IconButton>
+                {" "}
+                <PlayForWorkRoundedIcon className={classes.Icons} />
+              </IconButton>
+            ) : null}
             <IconButton>
               <SendOutlinedIcon
                 onClick={postMessage}

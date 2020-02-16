@@ -116,6 +116,8 @@ const styles = makeStyles(theme => ({
 const GroupsListTemplate = props => {
   const classes = styles();
   let history = useHistory();
+  let currentUsername = store.getState().userReducer.UserInfo.Username;
+  let currentUserId = store.getState().userReducer.UserInfo._id;
   const [openChildGroupsInfoDialog, setChildGroupsInfoDialog] = useState(false);
   const [currentGroup, setCurrentGroup] = useState({});
   const [favButtonClicked, TriggerUseEffect] = useState(false);
@@ -123,7 +125,7 @@ const GroupsListTemplate = props => {
   const [AllGroups, setAllGroups] = React.useState({});
   const [popoverTemplate, setPopoverTemplate] = useState();
   const [groupInfoFromChild, SetUpdatedGroupInfoFromChild] = useState(null);
-  const [sample, setSample] = useState(0);
+  const [sample, setSample] = useState([0]);
   const [userFavGroups, setUserFavGroups] = useState([]);
   const IconButtonItems = [
     {
@@ -186,61 +188,34 @@ const GroupsListTemplate = props => {
       showTooltip: true,
       showOnFav: true,
       click: async (groups, event) => {
-        console.log("Entered fav button click");
-        console.log("Before Updating Store:", userFavGroups);
         if (
           userFavGroups.some(favgroup => favgroup.GroupId == groups.GroupId)
         ) {
-          // setSample(sample+1)
-          // await
-          // props.deleteFavGroup(groups);
-          // let clonedFavGroups = store.getState().userReducer.UserInfo
-          //   .FavGroupsInfo;
-          // setUserFavGroups([
-          //   ...store.getState().userReducer.UserInfo.FavGroupsInfo
-          // ]);
-          // console.log(
-          //   "Fav Groups After Updating FavGroups State:",
-          //   store.getState().userReducer.UserInfo.FavGroupsInfoserFavGroups
-          // );
-          // TriggerUseEffect(true);
-          //setUserFavGroups(store.getState().userReducer.UserInfo.FavGroupsInfo);
-          // console.log("Axios Object:",groups)
-          // axios
-          //   .post("http://localhost:5000/Users/Remove/Fav/", groups)
-          //   .then(res =>
-          //     res.status == "200"
-          //       ? console.log("Success")
-          //       : console.log("Error Occured:", res.status, ":", res.statusText)
-          //   )
-          //   .catch(err => console.log(err));
-          // await
-          // props.deleteFavGroup(groups);
-          //TriggerUseEffect(true);
+          let resValue = {
+            _id: currentUserId,
+            GroupId: groups.GroupId
+          };
+          axios
+            .post("http://localhost:5000/Users/Remove/Fav/", resValue)
+            .then(res =>
+              res.status == "200"
+                ? TriggerUseEffect(prevState => !prevState)
+                : console.log("Error Occured:", res.status, ":", res.statusText)
+            )
+            .catch(err => console.log(err));
         } else {
-          // setSample(sample+1)
-          // props.addFavGroup(groups);
-          // let clonedFavGroups = store.getState().userReducer.UserInfo
-          //   .FavGroupsInfo;
-          // setUserFavGroups([
-          //   ...store.getState().userReducer.UserInfo.FavGroupsInfo
-          // ]);
-          // console.log(
-          //   "Fav Groups After Updating FavGroups State:",
-          //   store.getState().userReducer.UserInfo.FavGroupsInfo
-          // );
-          // console.log("Axios Object:",groups)
-          // axios
-          //   .post("http://localhost:5000/Users/Add/Fav/", groups )
-          //   .then(res =>
-          //     res.status == "200"
-          //       ? console.log("Success")
-          //       : console.log("Error Occured:", res.status, ":", res.statusText)
-          //   )
-          //   .catch(err => console.log(err));
-          // await props.addFavGroup(groups);
-          //TriggerUseEffect(true);
-          //setUserFavGroups(store.getState().userReducer.UserInfo.FavGroupsInfo);
+          let resValue = {
+            _id: currentUserId,
+            GroupConfig: groups
+          };
+          axios
+            .post("http://localhost:5000/Users/Add/Fav/", resValue)
+            .then(res =>
+              res.status == "200"
+                ? TriggerUseEffect(prevState => !prevState)
+                : console.log("Error Occured:", res.status, ":", res.statusText)
+            )
+            .catch(err => console.log(err));
         }
       }
     },
@@ -275,23 +250,34 @@ const GroupsListTemplate = props => {
   };
 
   const handleSaveUpdatedGroupDetails = () => {
-    //console.log("State Object after on submit:",groupInfoFromChild)
-    //console.log(props)
-
     console.log(
       FindCompleteGroupConfig(
         store.getState().groupsReducer.GroupsInfo,
         groupInfoFromChild
       )
     );
-    //props.updateGroupDetails(groupInfoFromChild)
-
     setChildGroupsInfoDialog(false);
   };
   const handleClear = () => {
     setChildGroupsInfoDialog(false);
   };
-
+  const handleFavDivAction = (ActionName, group) => {
+    if (ActionName == "Favourite") {
+      let resValue = {
+        _id: currentUserId,
+        GroupId: group.GroupId
+      };
+      console.log("resValue:", resValue);
+      axios
+        .post("http://localhost:5000/Users/Remove/Fav/", resValue)
+        .then(res =>
+          res.status == "200"
+            ? TriggerUseEffect(prevState => !prevState)
+            : console.log("Error Occured:", res.status, ":", res.statusText)
+        )
+        .catch(err => console.log(err));
+    }
+  };
   useEffect(() => {
     let clonedTemplate = [];
     for (let group in AllGroups) {
@@ -301,25 +287,32 @@ const GroupsListTemplate = props => {
   }, [AllGroups]);
 
   useEffect(() => {
-    setUserFavGroups(...store.getState().userReducer.UserInfo.FavGroupsInfo);
-  }, [favButtonClicked]);
-  useEffect(() => {
-    setUserFavGroups([...store.getState().userReducer.UserInfo.FavGroupsInfo]);
+    axios
+      .get(`http://localhost:5000/Users/${currentUsername}`)
+      .then(res =>
+        res.status == "200"
+          ? console.log(
+              "Response for Get:",
+              setUserFavGroups(res.data[0].FavGroupsInfo)
+            )
+          : console.log("Error Occured:", res.status, ":", res.statusText)
+      )
+      .catch(err => console.log(err));
   }, []);
-  // useEffect(async () => {
-  //   await axios
-  //     .get(
-  //       `http://localhost:5000/Users/${store.getState().userReducer.Username}`
-  //     )
-  //     .then(res =>
-  //       res.status == "200"
-  //         ? props.setUserFavGroups(res.data.FavGroupsInfo)
-  //         : console.log("Error Occured:", res.status, ":", res.statusText)
-  //     )
-  //     .catch(err => console.log(err));
 
-  //   //setUserFavGroups(store.getState().userReducer.UserInfo.FavGroupsInfo);
-  // }, [favButtonClicked]);
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/Users/${currentUsername}`)
+      .then(res =>
+        res.status == "200"
+          ? console.log(
+              "Response for Get:",
+              setUserFavGroups(res.data[0].FavGroupsInfo)
+            )
+          : console.log("Error Occured:", res.status, ":", res.statusText)
+      )
+      .catch(err => console.log(err));
+  }, [favButtonClicked]);
   return (
     <div align="center">
       <div align="center" className={classes.favDiv}>
@@ -333,6 +326,7 @@ const GroupsListTemplate = props => {
                   style={{ align: "center" }}
                   key={group.GroupId}
                   variant="rounded"
+                  onClick={event => changeGroupChilds(group, event, history)}
                 >
                   {group.GroupName.charAt(0)}
                 </Avatar>
@@ -351,6 +345,7 @@ const GroupsListTemplate = props => {
                           ? classes.favNavButtons
                           : classes.favDivButton
                       }
+                      onClick={() => handleFavDivAction(favIcons.name, group)}
                     >
                       {favIcons.Icon}
                     </IconButton>

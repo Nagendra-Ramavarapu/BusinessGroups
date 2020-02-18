@@ -1,15 +1,21 @@
-TODO at Office:
-Date: 2nd Feb
+TODO:
+
 Task: Try to work on Maintaining Single Dialog for Entire Application(Transactions,Update GroupInfo,chart) 
+
 @PriorityQueue:
 --------------> 2. Finish Update Group <--------------------
 --------------> 3. Finish Delete Group <--------------------
 
+@Updates Required:
+ >> Integrate Facebook, Google Authentication
+ >> OTP Provider for Authentication or Password change.
+ >> ID Generator (if required)
+
 @ItemsList:
 #Login: Template and MongoDBFinished
 #Signup: Template and MongoDB Finished 
+
 #Home
-  >> #Favourites:
   >> #RecentlyVisited:
 #Create Group:
   >> Template Finished 
@@ -20,10 +26,13 @@ Task: Try to work on Maintaining Single Dialog for Entire Application(Transactio
 #Join Group:
   >> Template Finished
   >> MongoDB Pending
+
 -----------------> #Move to Child: -----------------> Completed
 #Delete Group: ------------------> Not started 
 #Transactions: ------------------> Not started 
 #NewsFeed: ----------------------> Not started 
 #Predict Business: --------------> Not started 
 #Profile Details: ---------------> Not started 
-//HpyerLedger : https://medium.com/coinmonks/build-a-insurance-application-with-hyperledger-composer-and-react-js-part-1-3ebe7ad54986
+
+#Features Done (UI Pending):
+  >> User Favourite Groups 

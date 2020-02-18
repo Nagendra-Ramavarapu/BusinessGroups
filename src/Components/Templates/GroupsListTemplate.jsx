@@ -38,6 +38,13 @@ import Popover from "@material-ui/core/Popover";
 import MenuItem from "@material-ui/core/MenuItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import axios from "axios";
+import TransactionsTemplate from "./TransactionsTemplate";
+import TextField from "@material-ui/core/TextField";
+//import axios from "axios";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import BusinessCenterOutlinedIcon from "@material-ui/icons/BusinessCenterOutlined";
 
 const styles = makeStyles(theme => ({
   GroupsList: {
@@ -124,6 +131,7 @@ const GroupsListTemplate = props => {
   const [popoverAnchor, setPopoverAnchorPosition] = React.useState(null);
   const [AllGroups, setAllGroups] = React.useState({});
   const [popoverTemplate, setPopoverTemplate] = useState();
+  const [openTransactionDialog, setTransactionDialog] = useState(false);
   const [groupInfoFromChild, SetUpdatedGroupInfoFromChild] = useState(null);
   const [sample, setSample] = useState([0]);
   const [userFavGroups, setUserFavGroups] = useState([]);
@@ -154,7 +162,9 @@ const GroupsListTemplate = props => {
       groupManagerAccess: true,
       showTooltip: true,
       showOnFav: false,
-      click: () => {}
+      click: (groups, event) => {
+        setTransactionDialog(true);
+      }
     },
     {
       name: "BusinessLine",
@@ -267,7 +277,6 @@ const GroupsListTemplate = props => {
         _id: currentUserId,
         GroupId: group.GroupId
       };
-      console.log("resValue:", resValue);
       axios
         .post("http://localhost:5000/Users/Remove/Fav/", resValue)
         .then(res =>
@@ -277,6 +286,9 @@ const GroupsListTemplate = props => {
         )
         .catch(err => console.log(err));
     }
+  };
+  const closeTransactionDialog = () => {
+    setTransactionDialog(false);
   };
   useEffect(() => {
     let clonedTemplate = [];
@@ -431,6 +443,12 @@ const GroupsListTemplate = props => {
             <Button onClick={handleClear}>Cancel</Button>
             <Button onClick={handleSaveUpdatedGroupDetails}>Save</Button>
           </DialogActions>
+        </Dialog>
+        <Dialog open={openTransactionDialog} onClose={closeTransactionDialog}>
+        <DialogContent>
+          <TransactionsTemplate />
+        
+          </DialogContent>
         </Dialog>
         <Popover
           open={Boolean(popoverAnchor)}

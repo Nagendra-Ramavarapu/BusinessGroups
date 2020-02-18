@@ -56,7 +56,7 @@ const ChildGroupsInfoTemplate = groups => {
       .get("http://localhost:5000/Users/")
       .then(res => setUsersData(res.data))
       .catch(err => console.log(err));
-  });
+  },[]);
 
   const handleChildGroupNameChange = (e, childIndex) => {
     let clonedChildGroup = groupInfo;

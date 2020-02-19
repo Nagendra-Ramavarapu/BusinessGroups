@@ -62,6 +62,9 @@ router.route("/NewGroup").post((req, res) => {
     .catch(err => res.status(400).json("Error:" + err));
 });
 
+// Tested for Higher Level Groups, But Childs Groups are yet pending 
+// Note: MongoDB is not providing Feature update so re-design is Good Choice as of now 
+
 router.route("/update/:id").post((req, res) => {
   Groups.findById(req.params.id)
     .then(group => {
@@ -80,10 +83,23 @@ router.route("/update/:id").post((req, res) => {
     .catch(err => res.status(400).json("Error:", err));
 });
 
+//Same for Delete, Like Update
+
 router.route("/delete/:id").delete((req, res) => {
   Groups.findByIdAndDelete(req.params.id)
     .then(() => res.json("Group Deleted"))
     .catch(err => res.status(400).json("Error:" + err));
 });
+
+// GroupActivity is not Tested, but it works after re-design
+// As of Now Static Data is used in frontend
+
+router.route("Activity/:id").post((req,res) =>{
+  Groups.updateOne(
+    { _id: req.body._id },
+    { $push: { GroupActivity: [req.body.Activity] } }
+  ).then(() => res.json("Group Activity Recorded ...!!"))
+  .catch(err => res.status(400).json("Error:", err));
+})
 
 module.exports = router;

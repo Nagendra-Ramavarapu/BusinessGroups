@@ -60,7 +60,7 @@ export default class Example extends PureComponent {
     return (
       <div align="center">
       <AreaChart
-        width={500}
+        width={440}
         height={400}
         data={data}
         margin={{

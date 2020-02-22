@@ -41,10 +41,16 @@ import axios from "axios";
 import TransactionsTemplate from "./TransactionsTemplate";
 import TextField from "@material-ui/core/TextField";
 //import axios from "axios";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import BusinessCenterOutlinedIcon from "@material-ui/icons/BusinessCenterOutlined";
+import MessageOutlinedIcon from "@material-ui/icons/MessageOutlined";
+import Badge from "@material-ui/core/Badge";
+import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
+import Drawer from "@material-ui/core/Drawer";
 
 const styles = makeStyles(theme => ({
   GroupsList: {
@@ -67,6 +73,9 @@ const styles = makeStyles(theme => ({
   Icons: {
     color: Apptheme.color.PrimaryColor
   },
+  disableColor: {
+    color: "Pink"
+  },
   favIcon: {
     color: Apptheme.color.SecondaryColor
   },
@@ -79,8 +88,8 @@ const styles = makeStyles(theme => ({
     marginLeft: "4%",
     marginBottom: "1%",
     display: "flex",
-    maxWidth: "50vw",
-    minWidth: "50vw",
+    maxWidth: "52vw",
+    minWidth: "52vw",
     overflowX: "auto"
   },
   IndividualFavDiv: {
@@ -135,19 +144,11 @@ const GroupsListTemplate = props => {
   const [groupInfoFromChild, SetUpdatedGroupInfoFromChild] = useState(null);
   const [sample, setSample] = useState([0]);
   const [userFavGroups, setUserFavGroups] = useState([]);
+  const [userFavStartIndex, setUserFavStartIndex] = useState(0);
+  const [userFavEndIndex, setUserFavEndIndex] = useState(0);
+  const [currentSlideFav, setCurrentSlideFav] = useState([]);
+  const [moreItemsAnchorEl, setmoreItemsAnchorEl] = React.useState(null);
   const IconButtonItems = [
-    {
-      name: "ModifyChildGroups",
-      Icon: <GroupAddOutlinedIcon className={classes.Icons} />,
-      groupManagerAccess: true,
-      showTooltip: true,
-      showOnFav: false,
-      click: (groups, event) => {
-        groups.handlerToUpdateParentState = { updatedGroupsData };
-        setCurrentGroup(groups);
-        setChildGroupsInfoDialog(true);
-      }
-    },
     {
       name: "Report",
       Icon: <EqualizerOutlinedIcon className={classes.Icons} />,
@@ -230,17 +231,61 @@ const GroupsListTemplate = props => {
       }
     },
     {
-      name: "Delete",
-      Icon: <DeleteOutlineOutlinedIcon className={classes.Icons} />,
+      name: "GroupChat",
+      Icon: (
+        <Badge badgeContent={0} color="primary">
+          <MessageOutlinedIcon className={classes.Icons} />
+        </Badge>
+      ),
       groupManagerAccess: true,
       showTooltip: true,
       showOnFav: false,
-      click: () => {}
+      click: (groups, event) => {
+        console.log("Groups Info:", groups);
+      }
+    },
+    {
+      name: "Notifications",
+      Icon: (
+        <Badge badgeContent={0} color="Secondary">
+          <NotificationsNoneOutlinedIcon className={classes.Icons} />
+        </Badge>
+      ),
+      groupManagerAccess: true,
+      showTooltip: true,
+      showOnFav: false,
+      click: (groups, event) => {
+        console.log("Groups Info:", groups);
+      }
     },
     {
       name: "MoreItems",
       Icon: <MoreVertOutlinedIcon className={classes.Icons} />,
       groupManagerAccess: false,
+      showTooltip: true,
+      showOnFav: false,
+      click: (groups, event) => {
+        setmoreItemsAnchorEl(event.target);
+        groups.handlerToUpdateParentState = { updatedGroupsData };
+        setCurrentGroup(groups);
+      }
+    }
+  ];
+  const MoreItems = [
+    {
+      name: "ModifyGroups",
+      Icon: <GroupAddOutlinedIcon className={classes.Icons} />,
+      groupManagerAccess: true,
+      showTooltip: true,
+      showOnFav: false,
+      click: () => {
+        setChildGroupsInfoDialog(true);
+      }
+    },
+    {
+      name: "Delete",
+      Icon: <DeleteOutlineOutlinedIcon className={classes.Icons} />,
+      groupManagerAccess: true,
       showTooltip: true,
       showOnFav: false,
       click: () => {}
@@ -258,7 +303,18 @@ const GroupsListTemplate = props => {
   const updatedGroupsData = updatedGroupInfo => {
     SetUpdatedGroupInfoFromChild(updatedGroupInfo);
   };
-
+  const checkFavGroups = () => {
+    if (userFavGroups.length < 4) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+  const onFavRight = () => {};
+  const onFavLeft = () => {};
+  const handlemoreItemsAchorClose = () => {
+    setmoreItemsAnchorEl(null);
+  };
   const handleSaveUpdatedGroupDetails = () => {
     console.log(
       FindCompleteGroupConfig(
@@ -303,10 +359,7 @@ const GroupsListTemplate = props => {
       .get(`http://localhost:5000/Users/${currentUsername}`)
       .then(res =>
         res.status == "200"
-          ? console.log(
-              "Response for Get:",
-              setUserFavGroups(res.data[0].FavGroupsInfo)
-            )
+          ? setUserFavGroups(res.data[0].FavGroupsInfo)
           : console.log("Error Occured:", res.status, ":", res.statusText)
       )
       .catch(err => console.log(err));
@@ -317,17 +370,22 @@ const GroupsListTemplate = props => {
       .get(`http://localhost:5000/Users/${currentUsername}`)
       .then(res =>
         res.status == "200"
-          ? console.log(
-              "Response for Get:",
-              setUserFavGroups(res.data[0].FavGroupsInfo)
-            )
+          ? setUserFavGroups(res.data[0].FavGroupsInfo)
           : console.log("Error Occured:", res.status, ":", res.statusText)
       )
       .catch(err => console.log(err));
   }, [favButtonClicked]);
+
   return (
     <div align="center">
       <div align="center" className={classes.favDiv}>
+        <div>
+          <ChevronLeftIcon
+            onClick={() => console.log("You Clicked")}
+            className={userFavGroups.length < 5 && classes.disableColor}
+            style={{ marginTop: 60, marginRight: 5 }}
+          />
+        </div>
         {userFavGroups &&
           userFavGroups.map(group => (
             <div className={classes.IndividualFavDiv}>
@@ -366,6 +424,12 @@ const GroupsListTemplate = props => {
               </div>
             </div>
           ))}
+        <div>
+          <ChevronRightIcon
+            onClick={() => console.log("You Clicked")}
+            style={{ marginTop: 60 }}
+          />
+        </div>
       </div>
       <div align="center" className={classes.GroupsList}>
         {GroupsInfo.map(groups => (
@@ -445,9 +509,8 @@ const GroupsListTemplate = props => {
           </DialogActions>
         </Dialog>
         <Dialog open={openTransactionDialog} onClose={closeTransactionDialog}>
-        <DialogContent>
-          <TransactionsTemplate />
-        
+          <DialogContent>
+            <TransactionsTemplate />
           </DialogContent>
         </Dialog>
         <Popover
@@ -476,6 +539,29 @@ const GroupsListTemplate = props => {
                 </MenuItem>
               ) : null
             )}
+        </Popover>
+        <Popover
+          id="simple-popover"
+          open={Boolean(moreItemsAnchorEl)}
+          anchorEl={moreItemsAnchorEl}
+          onClose={handlemoreItemsAchorClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right"
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right"
+          }}
+        >
+          <List>
+            {MoreItems.map(moreItem => (
+              <MenuItem onClick={event => moreItem.click(currentGroup, event)}>
+                <ListItemIcon> {moreItem.Icon}</ListItemIcon>
+                <ListItemText>{moreItem.name}</ListItemText>
+              </MenuItem>
+            ))}
+          </List>
         </Popover>
       </div>
     </div>

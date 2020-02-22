@@ -76,7 +76,7 @@ const GroupsInfoTemplate = props => {
         <GroupsListTemplate groupsInfo={currentGroupInfo.ChildGroup} />
       ) : null}
       <div style={{ align: "center", display: "inline-flex" }}>
-        <div style={{ width: "28vw", maxHeight: "60vh", overflowY: "auto" }}>
+        <div style={{ width: "28vw",height:'50vh', minHeight:"50vh",maxHeight: "50vh", overflowY: "auto" }}>
           <List style={{ background: "aliceblue" }}>
             {" "}
             <b>Group Activity </b>
@@ -117,8 +117,8 @@ const GroupsInfoTemplate = props => {
         </div>
         <SampleChart />
       </div>
-      <div align ="center" style={{width:"55vw",height:150,marginTop:40,marginBottom:20}}>
-        <p><b><i>{currentGroupInfo.GroupName}</i>Transactions History </b></p>
+      <div align ="center" style={{width:"55vw",height:120,marginTop:40,marginBottom:20}}>
+        <p><b><i>{currentGroupInfo.GroupName}</i> Transactions History </b></p>
         {/* <TransactionsTable /> */}
         <TransactionsTable/>
       </div>

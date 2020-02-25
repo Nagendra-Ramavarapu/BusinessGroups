@@ -39,18 +39,11 @@ import MenuItem from "@material-ui/core/MenuItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import axios from "axios";
 import TransactionsTemplate from "./TransactionsTemplate";
-import TextField from "@material-ui/core/TextField";
-//import axios from "axios";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import BusinessCenterOutlinedIcon from "@material-ui/icons/BusinessCenterOutlined";
 import MessageOutlinedIcon from "@material-ui/icons/MessageOutlined";
 import Badge from "@material-ui/core/Badge";
 import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
-import Drawer from "@material-ui/core/Drawer";
 
 const styles = makeStyles(theme => ({
   GroupsList: {
@@ -142,12 +135,14 @@ const GroupsListTemplate = props => {
   const [popoverTemplate, setPopoverTemplate] = useState();
   const [openTransactionDialog, setTransactionDialog] = useState(false);
   const [groupInfoFromChild, SetUpdatedGroupInfoFromChild] = useState(null);
-  const [sample, setSample] = useState([0]);
+  const [showLeftFav, setLeftFavAction] = useState(false);
+  const [showRighFav, setRightFavAction] = useState(true);
   const [userFavGroups, setUserFavGroups] = useState([]);
   const [userFavStartIndex, setUserFavStartIndex] = useState(0);
-  const [userFavEndIndex, setUserFavEndIndex] = useState(0);
+  const [userFavEndIndex, setUserFavEndIndex] = useState(4);
   const [currentSlideFav, setCurrentSlideFav] = useState([]);
   const [moreItemsAnchorEl, setmoreItemsAnchorEl] = React.useState(null);
+  const [growAnimation, setgrowAnimation] = useState(false);
   const IconButtonItems = [
     {
       name: "Report",
@@ -234,10 +229,10 @@ const GroupsListTemplate = props => {
       name: "GroupChat",
       Icon: (
         <Badge badgeContent={0} color="primary">
-          <MessageOutlinedIcon className={classes.Icons} />
+          <MessageOutlinedIcon />
         </Badge>
       ),
-      groupManagerAccess: true,
+      groupManagerAccess: false,
       showTooltip: true,
       showOnFav: false,
       click: (groups, event) => {
@@ -248,10 +243,10 @@ const GroupsListTemplate = props => {
       name: "Notifications",
       Icon: (
         <Badge badgeContent={0} color="Secondary">
-          <NotificationsNoneOutlinedIcon className={classes.Icons} />
+          <NotificationsNoneOutlinedIcon />
         </Badge>
       ),
-      groupManagerAccess: true,
+      groupManagerAccess: false,
       showTooltip: true,
       showOnFav: false,
       click: (groups, event) => {
@@ -293,7 +288,7 @@ const GroupsListTemplate = props => {
   ];
   let GroupsInfo = props.groupsInfo;
   let currentUserName = store.getState().userReducer.UserInfo.Username;
-  //let userFavGroups = store.getState().userReducer.UserInfo.FavGroupsInfo;
+
   const closeChildGroupsInfoDialog = () => {
     setChildGroupsInfoDialog(false);
   };
@@ -303,15 +298,49 @@ const GroupsListTemplate = props => {
   const updatedGroupsData = updatedGroupInfo => {
     SetUpdatedGroupInfoFromChild(updatedGroupInfo);
   };
-  const checkFavGroups = () => {
-    if (userFavGroups.length < 4) {
-      return false;
+
+  const onFavRight = () => {
+    //TODO: check the possibilites on adding fav groups
+    //TODO: check the possibilites on Removing fav groups on GroupsList Div and Fav Div
+    // TODO: Check the possibility when we last index equals to userFavGroups.lenght
+    // Add right-circle and left-circle icon 
+    if (userFavEndIndex + 4 >= userFavGroups.length) {
+      setLeftFavAction(true);
+      setCurrentSlideFav(
+        userFavGroups.slice(userFavStartIndex + 4, userFavGroups.length)
+      );
+      setUserFavStartIndex(userFavStartIndex + 4);
+      setUserFavEndIndex(userFavGroups.length - 1);
+      setRightFavAction(false);
     } else {
-      return true;
+      setLeftFavAction(true);
+      setCurrentSlideFav(
+        userFavGroups.slice(userFavStartIndex + 4, userFavEndIndex + 4)
+      );
+      setUserFavStartIndex(userFavStartIndex + 4);
+      setUserFavEndIndex(userFavEndIndex + 4);
+      setRightFavAction(true);
     }
   };
-  const onFavRight = () => {};
-  const onFavLeft = () => {};
+  const onFavLeft = () => {
+    //TODO: check the possibilites on adding fav groups
+    //setgrowAnimation(true)
+    if (userFavEndIndex == userFavGroups.length - 1) {
+      setCurrentSlideFav(
+        userFavGroups.slice(userFavStartIndex - 4, userFavStartIndex)
+      );
+      setUserFavStartIndex(userFavStartIndex - 4);
+      setUserFavEndIndex(userFavStartIndex);
+      setRightFavAction(true);
+    } else {
+      setCurrentSlideFav(
+        userFavGroups.slice(userFavStartIndex - 4, userFavEndIndex - 4)
+      );
+      setUserFavStartIndex(userFavStartIndex - 4);
+      setUserFavEndIndex(userFavEndIndex - 4);
+      setRightFavAction(true);
+    }
+  };
   const handlemoreItemsAchorClose = () => {
     setmoreItemsAnchorEl(null);
   };
@@ -366,6 +395,10 @@ const GroupsListTemplate = props => {
   }, []);
 
   useEffect(() => {
+    setCurrentSlideFav(userFavGroups.slice(userFavStartIndex, userFavEndIndex));
+  }, [userFavGroups]);
+
+  useEffect(() => {
     axios
       .get(`http://localhost:5000/Users/${currentUsername}`)
       .then(res =>
@@ -380,16 +413,18 @@ const GroupsListTemplate = props => {
     <div align="center">
       <div align="center" className={classes.favDiv}>
         <div>
-          <ChevronLeftIcon
-            onClick={() => console.log("You Clicked")}
-            className={userFavGroups.length < 5 && classes.disableColor}
-            style={{ marginTop: 60, marginRight: 5 }}
-          />
+          {showLeftFav && userFavStartIndex != 0 && (
+            <ChevronLeftIcon
+              onClick={onFavLeft}
+              className={userFavGroups.length < 5 && classes.disableColor}
+              style={{ marginTop: 60, marginRight: 5, width: 30, height: 30 }}
+            />
+          )}
         </div>
-        {userFavGroups &&
-          userFavGroups.map(group => (
+        {currentSlideFav &&
+          currentSlideFav.map(group => (
             <div className={classes.IndividualFavDiv}>
-              <p>{group.GroupName}</p>
+              <p>{group.GroupId}</p>
               <Tooltip title={group.GroupName}>
                 <Avatar
                   className={classes.avatar}
@@ -425,10 +460,12 @@ const GroupsListTemplate = props => {
             </div>
           ))}
         <div>
-          <ChevronRightIcon
-            onClick={() => console.log("You Clicked")}
-            style={{ marginTop: 60 }}
-          />
+          {userFavGroups.length > 4 && showRighFav && (
+            <ChevronRightIcon
+              onClick={onFavRight}
+              style={{ marginTop: 60, width: 30, height: 30 }}
+            />
+          )}
         </div>
       </div>
       <div align="center" className={classes.GroupsList}>

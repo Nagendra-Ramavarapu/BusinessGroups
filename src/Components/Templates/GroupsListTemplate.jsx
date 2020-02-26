@@ -19,6 +19,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import DeleteOutlineOutlinedIcon from "@material-ui/icons/DeleteOutlineOutlined";
 import PlayForWorkRoundedIcon from "@material-ui/icons/PlayForWorkRounded";
 import ChildGroupsInfoTemplate from "./ChildGroupsInfoTemplate";
+import SampleChart from "../Graphs/SampleChart";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -66,8 +67,11 @@ const styles = makeStyles(theme => ({
   Icons: {
     color: Apptheme.color.PrimaryColor
   },
-  disableColor: {
-    color: "Pink"
+  disableFavNav: {
+    visibility: "hidden"
+  },
+  ShowFavNav: {
+    visibility: "visible"
   },
   favIcon: {
     color: Apptheme.color.SecondaryColor
@@ -134,6 +138,7 @@ const GroupsListTemplate = props => {
   const [AllGroups, setAllGroups] = React.useState({});
   const [popoverTemplate, setPopoverTemplate] = useState();
   const [openTransactionDialog, setTransactionDialog] = useState(false);
+  const [openChartDialog, setChartDialog] = useState(false);
   const [groupInfoFromChild, SetUpdatedGroupInfoFromChild] = useState(null);
   const [showLeftFav, setLeftFavAction] = useState(false);
   const [showRighFav, setRightFavAction] = useState(true);
@@ -143,6 +148,7 @@ const GroupsListTemplate = props => {
   const [currentSlideFav, setCurrentSlideFav] = useState([]);
   const [moreItemsAnchorEl, setmoreItemsAnchorEl] = React.useState(null);
   const [growAnimation, setgrowAnimation] = useState(false);
+
   const IconButtonItems = [
     {
       name: "Report",
@@ -150,7 +156,9 @@ const GroupsListTemplate = props => {
       groupManagerAccess: false,
       showTooltip: true,
       showOnFav: true,
-      click: () => {}
+      click: (groups, event) => {
+        setChartDialog(true);
+      }
     },
     {
       name: "PostTransactionUpdate",
@@ -303,7 +311,7 @@ const GroupsListTemplate = props => {
     //TODO: check the possibilites on adding fav groups
     //TODO: check the possibilites on Removing fav groups on GroupsList Div and Fav Div
     // TODO: Check the possibility when we last index equals to userFavGroups.lenght
-    // Add right-circle and left-circle icon 
+    // Add right-circle and left-circle icon
     if (userFavEndIndex + 4 >= userFavGroups.length) {
       setLeftFavAction(true);
       setCurrentSlideFav(
@@ -370,10 +378,16 @@ const GroupsListTemplate = props => {
             : console.log("Error Occured:", res.status, ":", res.statusText)
         )
         .catch(err => console.log(err));
+    } else if (ActionName == "Report") {
+      setChartDialog(true);
     }
   };
   const closeTransactionDialog = () => {
     setTransactionDialog(false);
+  };
+
+  const closeChartDialog = () => {
+    setChartDialog(false);
   };
   useEffect(() => {
     let clonedTemplate = [];
@@ -412,14 +426,18 @@ const GroupsListTemplate = props => {
   return (
     <div align="center">
       <div align="center" className={classes.favDiv}>
-        <div>
-          {showLeftFav && userFavStartIndex != 0 && (
-            <ChevronLeftIcon
-              onClick={onFavLeft}
-              className={userFavGroups.length < 5 && classes.disableColor}
-              style={{ marginTop: 60, marginRight: 5, width: 30, height: 30 }}
-            />
-          )}
+        <div
+          className={
+            showLeftFav && userFavStartIndex != 0
+              ? classes.ShowFavNav
+              : classes.disableFavNav
+          }
+        >
+          <ChevronLeftIcon
+            onClick={onFavLeft}
+            className={userFavGroups.length < 5 && classes.disableFavNav}
+            style={{ marginTop: 60, marginRight: 5, width: 30, height: 30 }}
+          />
         </div>
         {currentSlideFav &&
           currentSlideFav.map(group => (
@@ -459,13 +477,17 @@ const GroupsListTemplate = props => {
               </div>
             </div>
           ))}
-        <div>
-          {userFavGroups.length > 4 && showRighFav && (
-            <ChevronRightIcon
-              onClick={onFavRight}
-              style={{ marginTop: 60, width: 30, height: 30 }}
-            />
-          )}
+        <div
+          className={
+            userFavGroups.length > 4 && showRighFav
+              ? classes.ShowFavNav
+              : classes.disableFavNav
+          }
+        >
+          <ChevronRightIcon
+            onClick={onFavRight}
+            style={{ marginTop: 60, width: 30, height: 30 }}
+          />
         </div>
       </div>
       <div align="center" className={classes.GroupsList}>
@@ -600,6 +622,14 @@ const GroupsListTemplate = props => {
             ))}
           </List>
         </Popover>
+        <Dialog open={openChartDialog} onClose={closeChartDialog}>
+          <DialogTitle id="form-dialog-title">
+            Sample chart showing the Chart View of the Transactions
+          </DialogTitle>
+          <DialogContent style={{ width: "40vw", height: "70vh" }}>
+            <SampleChart />
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
@@ -610,8 +640,6 @@ const changeGroupChilds = (groups, event, history) => {
     ? (event.target.value = groups)
     : history.push(`/GroupsInfoTemplate/${groups.GroupId}`, groups);
 };
-
-const setGroupChilds = groups => {};
 
 const mapDispatchToProps = dispatch => ({
   updateGroupDetails: setGroupDetails => {

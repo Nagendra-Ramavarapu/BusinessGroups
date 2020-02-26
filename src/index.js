@@ -15,6 +15,7 @@ import NewsFeed from '../src/Components/NewsFeed'
 import CreateGroup from "../src/Components/CreateGroup";
 import GroupsInfoTemplate from "../src/Components/Templates/GroupsInfoTemplate";
 import JoinGroup from './Components/JoinGroup'
+import PredictBusiness from "./Components/PredictBusiness"
 import { persistStore } from 'redux-persist'
 
 const Persistor = persistStore(store);
@@ -30,6 +31,7 @@ const routing = (
         <Route path="/CreateGroup" component={CreateGroup} />
         <Route path="/JoinGroup" component={JoinGroup} />
         <Route path="/NewsFeed" component={NewsFeed} />
+        <Route path="/PredictBusiness" component={PredictBusiness}/>
         {/* <Route  path="/HigherLevelGroupList" component={HigherLevelGroupList} /> */}
         <Route  path="/GroupsInfoTemplate/:GroupId" component={GroupsInfoTemplate} />
         </Switch>

@@ -31,30 +31,37 @@ const TransactionsTemplate = () => {
   const classes = styles();
   let currentUser = store.getState().userReducer.UserInfo.Username;
   let TransactionState = {
-    TransactionId: "Transjksafbhsbf12324awewqweewa",
+    TransactionId: "q112212343gfgf#2334weeqqweqweeqwe",
     GroupId: "G1",
     UserId: "",
     Purpouse: "",
-    TransactionAmount: 0,
+    TransactionAmount: "",
     AccessType: "General",
-    WalletAmountBefore: 0,
-    WalletAmountAfter: 0,
+    WalletAmountBefore: "",
+    WalletAmountAfter: "",
     Status: "",
-    Returns: 0
+    Returns: ""
   };
   const [TransactionObj, setTransactionObj] = useState(TransactionState);
   const [triggerUseEffect, setUseEffect] = useState(false);
+
   const handleSubmitTransaction = async () => {
     TransactionObj.TransactionAmount < TransactionObj.Returns
-      ? await setTransactionObj({ ...TransactionObj, Status: "Profit" })
-      : await setTransactionObj({ ...TransactionObj, Status: "Loss" });
+      ? await setTransactionObj({
+          ...TransactionObj,
+          Status: "Profit"
+        })
+      : await setTransactionObj({
+          ...TransactionObj,
+          Status: "Loss"
+        });
     setTransactionObj({ ...TransactionObj, UserId: currentUser });
     setUseEffect(true);
   };
 
   useEffect(() => {
-    console.log("TransactionObj In UseEffect", TransactionObj);
     let resValue = { ...TransactionObj };
+    console.log("Before Post:", resValue);
     axios
       .post("http://localhost:5000/Transactions/NewTransaction/", resValue)
       .then(res =>
@@ -66,12 +73,11 @@ const TransactionsTemplate = () => {
   }, [triggerUseEffect]);
   return (
     <div align="center" style={{ width: 350, minHeight: 350 }}>
-      <div style={{ height: 10 }}>
-        <IconButton style={{ float: "right" }}>
-          <CloseIcon />
-        </IconButton>
-      </div>
-      <h3 style={{ marginTop: 20 }}>Submit Expense Details here</h3>
+      <IconButton style={{ float: "right", padding: 0 }}>
+        <CloseIcon />
+      </IconButton>
+      <div style={{ height: 40 }}></div>
+      <h3 style={{ marginTop: 30 }}>Submit Expense Details here</h3>
       <TextField
         type="Number"
         value={TransactionObj.TransactionAmount}
@@ -80,7 +86,7 @@ const TransactionsTemplate = () => {
         onChange={event =>
           setTransactionObj({
             ...TransactionObj,
-            TransactionAmount: event.target.value
+            TransactionAmount: parseInt(event.target.value)
           })
         }
         InputProps={{
@@ -115,7 +121,10 @@ const TransactionsTemplate = () => {
         placeholder="Enter Returns"
         className={classes.TextField}
         onChange={event =>
-          setTransactionObj({ ...TransactionObj, Returns: event.target.value })
+          setTransactionObj({
+            ...TransactionObj,
+            Returns: parseInt(event.target.value)
+          })
         }
         InputProps={{
           startAdornment: (

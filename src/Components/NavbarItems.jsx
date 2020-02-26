@@ -49,7 +49,10 @@ const generalItems = [
     },
     {
       name: "Predict Business",
-      click: () => {},
+      click: history => {
+        if (!(history.location && history.location.pathname === "/PredictBusiness"))
+          history.push("/PredictBusiness");
+      },
       icon: <BusinessCenterTwoToneIcon style={{color:Apptheme.color.PrimaryColor}}/>
     }
   ];

@@ -44,7 +44,11 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import MessageOutlinedIcon from "@material-ui/icons/MessageOutlined";
 import Badge from "@material-ui/core/Badge";
+import FavLeftIcon from "../../Icons/FavLeftIcon";
+import FavRightIcon from "../../Icons/FavRightIcon";
+import Skeleton from "@material-ui/lab/Skeleton";
 import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
+import { useRef } from "react";
 
 const styles = makeStyles(theme => ({
   GroupsList: {
@@ -123,6 +127,11 @@ const styles = makeStyles(theme => ({
     marginRight: 5,
     marginTop: 25,
     color: Apptheme.color.PrimaryColor
+  },
+  skeltonListItems: {
+    minWidth: "50vw",
+    maxWidth: "53vw",
+    height: "35vh"
   }
 }));
 
@@ -148,6 +157,8 @@ const GroupsListTemplate = props => {
   const [currentSlideFav, setCurrentSlideFav] = useState([]);
   const [moreItemsAnchorEl, setmoreItemsAnchorEl] = React.useState(null);
   const [growAnimation, setgrowAnimation] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const favRef = useRef(null)
 
   const IconButtonItems = [
     {
@@ -161,7 +172,7 @@ const GroupsListTemplate = props => {
       }
     },
     {
-      name: "PostTransactionUpdate",
+      name: "Post Transaction Update",
       Icon: <PostAddOutlinedIcon className={classes.Icons} />,
       groupManagerAccess: true,
       showTooltip: true,
@@ -276,7 +287,7 @@ const GroupsListTemplate = props => {
   ];
   const MoreItems = [
     {
-      name: "ModifyGroups",
+      name: "Modify Groups Info",
       Icon: <GroupAddOutlinedIcon className={classes.Icons} />,
       groupManagerAccess: true,
       showTooltip: true,
@@ -286,7 +297,7 @@ const GroupsListTemplate = props => {
       }
     },
     {
-      name: "Delete",
+      name: "Delete Group",
       Icon: <DeleteOutlineOutlinedIcon className={classes.Icons} />,
       groupManagerAccess: true,
       showTooltip: true,
@@ -398,6 +409,8 @@ const GroupsListTemplate = props => {
   }, [AllGroups]);
 
   useEffect(() => {
+    setLoading(true);
+    window.scrollTo(0,favRef.current)
     axios
       .get(`http://localhost:5000/Users/${currentUsername}`)
       .then(res =>
@@ -410,6 +423,9 @@ const GroupsListTemplate = props => {
 
   useEffect(() => {
     setCurrentSlideFav(userFavGroups.slice(userFavStartIndex, userFavEndIndex));
+    setTimeout(() => {
+      setLoading(false);
+    }, 900);
   }, [userFavGroups]);
 
   useEffect(() => {
@@ -425,7 +441,7 @@ const GroupsListTemplate = props => {
 
   return (
     <div align="center">
-      <div align="center" className={classes.favDiv}>
+      <div align="center" ref= {favRef} className={classes.favDiv}>
         <div
           className={
             showLeftFav && userFavStartIndex != 0
@@ -433,50 +449,69 @@ const GroupsListTemplate = props => {
               : classes.disableFavNav
           }
         >
-          <ChevronLeftIcon
-            onClick={onFavLeft}
-            className={userFavGroups.length < 5 && classes.disableFavNav}
-            style={{ marginTop: 60, marginRight: 5, width: 30, height: 30 }}
-          />
+          {!isLoading && (
+            <IconButton
+              onClick={onFavLeft}
+              className={userFavGroups.length < 5 && classes.disableFavNav}
+              style={{
+                marginTop: 60,
+                marginRight: 7,
+                padding: 0,
+                color: Apptheme.color.SecondaryColor
+              }}
+            >
+              <FavLeftIcon />
+            </IconButton>
+          )}
         </div>
-        {currentSlideFav &&
-          currentSlideFav.map(group => (
-            <div className={classes.IndividualFavDiv}>
-              <p>{group.GroupId}</p>
-              <Tooltip title={group.GroupName}>
-                <Avatar
-                  className={classes.avatar}
-                  style={{ align: "center" }}
-                  key={group.GroupId}
-                  variant="rounded"
-                  onClick={event => changeGroupChilds(group, event, history)}
-                >
-                  {group.GroupName.charAt(0)}
-                </Avatar>
-              </Tooltip>
-              <div className={classes.favDivButtons}>
-                {IconButtonItems.map(favIcons =>
-                  favIcons.showOnFav === true ? (
-                    <IconButton
-                      size="small"
-                      className={
-                        favIcons.name === "BusinessLine"
-                          ? group.GroupConfig.InvestmentStatus === "Loss"
-                            ? classes.BusinessLineLossFavButton
-                            : classes.BusinessLineProfitFavButton
-                          : favIcons.name !== "Favourite"
-                          ? classes.favNavButtons
-                          : classes.favDivButton
-                      }
-                      onClick={() => handleFavDivAction(favIcons.name, group)}
-                    >
-                      {favIcons.Icon}
-                    </IconButton>
-                  ) : null
-                )}
+        {isLoading
+          ? [0, 1, 2, 3].map(index => (
+              <Skeleton
+                animation="wave"
+                width={160}
+                height={180}
+                style={{marginRight:5, borderRadius:10}}
+                variant="rect"
+              />
+            ))
+          : currentSlideFav &&
+            currentSlideFav.map(group => (
+              <div className={classes.IndividualFavDiv}>
+                <p>{group.GroupId}</p>
+                <Tooltip title={group.GroupName}>
+                  <Avatar
+                    className={classes.avatar}
+                    style={{ align: "center" }}
+                    key={group.GroupId}
+                    variant="rounded"
+                    onClick={event => changeGroupChilds(group, event, history)}
+                  >
+                    {group.GroupName.charAt(0)}
+                  </Avatar>
+                </Tooltip>
+                <div className={classes.favDivButtons}>
+                  {IconButtonItems.map(favIcons =>
+                    favIcons.showOnFav === true ? (
+                      <IconButton
+                        size="small"
+                        className={
+                          favIcons.name === "BusinessLine"
+                            ? group.GroupConfig.InvestmentStatus === "Loss"
+                              ? classes.BusinessLineLossFavButton
+                              : classes.BusinessLineProfitFavButton
+                            : favIcons.name !== "Favourite"
+                            ? classes.favNavButtons
+                            : classes.favDivButton
+                        }
+                        onClick={() => handleFavDivAction(favIcons.name, group)}
+                      >
+                        {favIcons.Icon}
+                      </IconButton>
+                    ) : null
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         <div
           className={
             userFavGroups.length > 4 && showRighFav
@@ -484,10 +519,18 @@ const GroupsListTemplate = props => {
               : classes.disableFavNav
           }
         >
-          <ChevronRightIcon
-            onClick={onFavRight}
-            style={{ marginTop: 60, width: 30, height: 30 }}
-          />
+          {!isLoading && (
+            <IconButton
+              onClick={onFavRight}
+              style={{
+                marginTop: 60,
+                padding: 0,
+                color: Apptheme.color.SecondaryColor
+              }}
+            >
+              <FavRightIcon />
+            </IconButton>
+          )}
         </div>
       </div>
       <div align="center" className={classes.GroupsList}>
@@ -500,52 +543,74 @@ const GroupsListTemplate = props => {
                   button
                   onClick={e => changeGroupChilds(groups, e, history)}
                 >
-                  <ListItemAvatar>
-                    <Avatar className={classes.avatar}>
-                      {groups.GroupName.charAt(0)}
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText className={classes.Icons}>
-                    {groups.GroupName}
-                  </ListItemText>
+                  {isLoading ? (
+                    <Skeleton
+                      animation="wave"
+                      variant="circle"
+                      width={80}
+                      height={50}
+                    />
+                  ) : (
+                    <ListItemAvatar>
+                      <Avatar className={classes.avatar}>
+                        {groups.GroupName.charAt(0)}
+                      </Avatar>
+                    </ListItemAvatar>
+                  )}
+                  {isLoading ? (
+                    <Skeleton
+                      style={{ marginLeft: 5 }}
+                      animation="wave"
+                      variant="rect"
+                      width={900}
+                      height={40}
+                    />
+                  ) : (
+                    <ListItemText className={classes.Icons}>
+                      {groups.GroupName}
+                    </ListItemText>
+                  )}
                 </ListItem>
               </Tooltip>
-              {IconButtonItems.map(buttons =>
-                !buttons.groupManagerAccess ? (
-                  <Tooltip title={buttons.name}>
-                    <IconButton
-                      className={
-                        buttons.name === "BusinessLine"
-                          ? groups.GroupConfig.InvestmentStatus === "Loss"
-                            ? classes.investmentStatusLoss
-                            : classes.investmentStatusProfit
-                          : buttons.name === "Favourite"
-                          ? userFavGroups.some(
-                              Favgroup => Favgroup.GroupId === groups.GroupId
-                            )
-                            ? classes.favIcon
+              {!isLoading &&
+                IconButtonItems.map(buttons =>
+                  !buttons.groupManagerAccess ? (
+                    <Tooltip title={buttons.name}>
+                      <IconButton
+                        className={
+                          buttons.name === "BusinessLine"
+                            ? groups.GroupConfig.InvestmentStatus === "Loss"
+                              ? classes.investmentStatusLoss
+                              : classes.investmentStatusProfit
+                            : buttons.name === "Favourite"
+                            ? userFavGroups.some(
+                                Favgroup => Favgroup.GroupId === groups.GroupId
+                              )
+                              ? classes.favIcon
+                              : classes.Icons
                             : classes.Icons
-                          : classes.Icons
-                      }
-                      onClick={event => {
-                        buttons.click(groups, event);
-                      }}
-                    >
-                      {buttons.Icon}
-                    </IconButton>
-                  </Tooltip>
-                ) : currentUserName === groups.GroupConfig.GroupManager ? (
-                  <Tooltip title={buttons.name}>
-                    <IconButton
-                      onClick={event => {
-                        buttons.click(groups, event);
-                      }}
-                    >
-                      {buttons.Icon}
-                    </IconButton>
-                  </Tooltip>
-                ) : null
-              )}
+                        }
+                        style={{ padding: 5, marginRight: 7 }}
+                        onClick={event => {
+                          buttons.click(groups, event);
+                        }}
+                      >
+                        {buttons.Icon}
+                      </IconButton>
+                    </Tooltip>
+                  ) : currentUserName === groups.GroupConfig.GroupManager ? (
+                    <Tooltip title={buttons.name}>
+                      <IconButton
+                        onClick={event => {
+                          buttons.click(groups, event);
+                        }}
+                        style={{ padding: 5, marginRight: 7 }}
+                      >
+                        {buttons.Icon}
+                      </IconButton>
+                    </Tooltip>
+                  ) : null
+                )}
             </ListItem>
           </List>
         ))}

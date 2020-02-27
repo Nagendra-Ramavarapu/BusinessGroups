@@ -119,7 +119,6 @@ const GroupsInfoTemplate = props => {
       </div>
       <div align ="center" style={{width:"55vw",height:120,marginTop:40,marginBottom:20}}>
         <p><b><i>{currentGroupInfo.GroupName}</i> Transactions History </b></p>
-        {/* <TransactionsTable /> */}
         <TransactionsTable/>
       </div>
     </div>

@@ -11,7 +11,6 @@ const Home = () => {
     <div>
      {isMobile && isMobile ? <Navbar />: <NavbarDesktop/>} 
       <HigherLevelGroupList />
-      {/* <NewsFeed /> */}
     </div>
   );
 };

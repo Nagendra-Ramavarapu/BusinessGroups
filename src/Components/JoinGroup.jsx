@@ -135,7 +135,7 @@ const JoinGroup = () => {
             <Tooltip title="Send Join Request">
               <IconButton
                 style={{ marginTop: "3%", marginLeft: "10%", color: "Black" }}
-                onClikc={() => sendGroupInvite()}
+                onClick={() => sendGroupInvite()}
               >
                 <AddCircleOutlineOutlinedIcon className={classes.Icons} />
               </IconButton>

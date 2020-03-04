@@ -3,7 +3,8 @@ const Apptheme={
     color:{
         PrimaryColor:'#233d58',
         SecondaryColor:'#00cc00',
-        ErrorColor:'',
+        ButtonColor:"#acff98",
+        ErrorColor:'red',
         SuccessColor:''
     },
     avatar:{

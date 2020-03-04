@@ -13,6 +13,7 @@ import GetUsersGroupData from "../DataProcess/ProcessGroupData";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
+import CheckIcon from "@material-ui/icons/Check";
 import Logo from "../Logo/logo3.png";
 import Button from "@material-ui/core/Button";
 import Bot from "../Icons/Bot.png";
@@ -21,7 +22,7 @@ import EmailOutlinedIcon from "@material-ui/icons/EmailOutlined";
 import SettingsBackupRestoreIcon from "@material-ui/icons/SettingsBackupRestore";
 import ContactMailOutlinedIcon from "@material-ui/icons/ContactMailOutlined";
 import ReactCardFlip from "react-card-flip";
-import Apptheme from './AppStylings/Apptheme'
+import Apptheme from "./AppStylings/Apptheme";
 
 const styles = makeStyles(theme => ({
   loginDiv: {
@@ -30,13 +31,14 @@ const styles = makeStyles(theme => ({
   },
   TextField: {
     margin: 5,
-    padding: "1%",
+    padding: "1%"
   },
   signup: {
     color: Apptheme.color.SecondaryColor
   },
   submitButton: {
-    color: "#000000",
+    color: "black",
+    background: Apptheme.color.ButtonColor,
     margin: "1%"
   },
   bot: {
@@ -46,10 +48,21 @@ const styles = makeStyles(theme => ({
     float: "right"
   },
   SignupTextField: {
-    padding: "0.5%"
+    padding: "0.5%",
+    marginRight: 5
   },
-  Icons:{
-    color:Apptheme.color.PrimaryColor
+  ErrorTextField: {
+    color: "Red"
+  },
+  SignupErrorTextField: {
+    padding: "0.5%",
+    marginRight: 5
+  },
+  Icons: {
+    color: Apptheme.color.PrimaryColor
+  },
+  ErrorIcons: {
+    color: Apptheme.color.ErrorColor
   }
 }));
 const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
@@ -65,22 +78,33 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
     Password: "",
     Name: "",
     Gender: "",
-    GroupId: [],
+    Wallet: 0,
+    GroupId: ["G3", "LG1", "Ey4"],
     ContactNumber: 0,
     Email: "",
     GroupManagerRequests: [],
     GroupRequests: [],
     GroupInvites: [],
-    GroupsInfo: []
+    FavGroupsInfo: []
   };
   const [loginInfo, setUserInfo] = useState(userDetailsTemplate);
   const [UserDB, setUserDB] = useState({});
   const [flip, fliptoSignup] = React.useState(false);
-  const [clear, setClear] = React.useState(false);
   const [GroupsList, setGroupsList] = React.useState([]);
   const [signupInfo, setSignupInfo] = React.useState(signupDetailsTemplate);
+  const [retypePassword, setRetypePassword] = React.useState("");
+  const [usernameError, setusernameError] = React.useState(false);
+  const [passwordError, setpasswordError] = React.useState(false);
+  const [signupNameError, setsignupNameError] = React.useState(false);
+  const [signupEmailError, setsignupEmailError] = React.useState(false);
+  const [signupUsernameError, setsignupUsernameError] = React.useState(false);
+  const [signupPasswordError, setsignupPasswordError] = React.useState(false);
+  const [
+    signupRetypePasswordError,
+    setsignupRetpePasswordError
+  ] = React.useState(false);
   let history = useHistory();
-  
+
   // Use below for Local Data without MongoDB Atlas
   // const WorkSpaceConfig = JSON.parse(WorkSpaceList);
   // const GroupsList = WorkSpaceConfig.WorkSpace.Groups;
@@ -115,28 +139,102 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
       .get("http://localhost:5000/Groups/")
       .then(res => setGroupsList(res.data))
       .catch(err => console.log(err));
-  },[loginInfo.doGroupsAPICall]);
+  }, [loginInfo.doGroupsAPICall]);
 
-  const handleLoginSubmit = evt => {
+  const handleLoginSubmit = async evt => {
     evt.preventDefault();
-    setUserInfo({ ...loginInfo, doUserAPICall: true });
-    if (UserDB.Username && UserDB.Username === loginInfo.Username) {
-      setUserDetails(UserDB);
-      setUserInfo({ ...loginInfo, doGroupsAPICall: true });
+    await setUserInfo({
+      ...loginInfo,
+      doUserAPICall: !loginInfo.doUserAPICall
+    });
+    if (
+      UserDB.Username &&
+      UserDB.Username === loginInfo.Username &&
+      UserDB.Password &&
+      UserDB.Password === loginInfo.Password
+    ) {
+      // await setUserDetails(UserDB);
+      await setUserInfo({ ...loginInfo, doGroupsAPICall: true });
       let ProcessedData = GetUsersGroupData(GroupsList, UserDB.GroupID);
-      setGroupsDetails(ProcessedData);
+      await setGroupsDetails(ProcessedData);
+      setUserInfo(userDetailsTemplate);
+      setpasswordError(false);
+      setusernameError(false);
       history.push("/Home");
     } else {
-      alert("Invalid Credentials");
+      if (UserDB.Username && UserDB.Username !== loginInfo.Username) {
+        setusernameError(true);
+        setpasswordError(false);
+        setUserInfo({ ...loginInfo, Username: "" });
+      } else {
+        setpasswordError(true);
+        setusernameError(false);
+        setUserInfo({ ...loginInfo, Password: "" });
+      }
     }
+  };
+
+  const validatePassword = () => {
+    return signupInfo.Password.length >= 8 ? true : false;
+  };
+
+  const validateEmail = () => {
+    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+      signupInfo.Email
+    )
+      ? true
+      : false;
+  };
+
+  const validateUsername = () => {
+    return signupInfo.Username.length >= 5 ? true : false;
   };
 
   const handleSignupSubmit = event => {
     event.preventDefault();
-    axios
-      .post("http://localhost:5000/Users/SignUp", signupInfo)
-      .then(res => setClear(!clear))
-      .catch(err => console.log(err));
+    if (signupInfo.Name == "" || signupInfo.Name == " ") {
+      setsignupNameError(true);
+    } else if (!validateEmail()) {
+      setsignupEmailError(true);
+      setsignupNameError(false);
+      setSignupInfo({ ...signupInfo, Email: "" });
+    } else if (!validateUsername()) {
+      setsignupUsernameError(true);
+      setsignupEmailError(false);
+      setsignupNameError(false);
+      setSignupInfo({ ...signupInfo, Username: "" });
+    } else if (!validatePassword()) {
+      setsignupPasswordError(true);
+      setsignupUsernameError(false);
+      setsignupEmailError(false);
+      setsignupNameError(false);
+      setSignupInfo({ ...signupInfo, Password: "" });
+    } else if (signupInfo.Password !== retypePassword) {
+      setsignupRetpePasswordError(true);
+      setsignupPasswordError(false);
+      setsignupEmailError(false);
+      setsignupUsernameError(false);
+      setsignupNameError(false);
+      setRetypePassword("");
+    } else {
+      axios
+        .post("http://localhost:5000/Users/SignUp", signupInfo)
+        .then(res =>
+          res.status == "200" ? handleToReturnLoginPage() : handleSignupError()
+        )
+        .catch(err => console.log(err));
+      setsignupRetpePasswordError(false);
+    }
+  };
+
+  const handleToReturnLoginPage = event => {
+    setSignupInfo(signupDetailsTemplate);
+    setRetypePassword("");
+    fliptoSignup(!flip);
+  };
+
+  const handleSignupError = () => {
+    alert("Network Error !!! or Bad ReQuest");
   };
   return (
     <div align="center" className={classes.loginDiv}>
@@ -151,14 +249,18 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
             type="Text"
             value={loginInfo.Username}
             className={classes.TextField}
-            placeholder="Enter Username"
+            placeholder={usernameError ? "Invalid Username" : "Enter Username"}
             onChange={e =>
               setUserInfo({ ...loginInfo, Username: e.target.value })
             }
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <AccountCircle className={classes.Icons} />
+                  <AccountCircle
+                    className={
+                      usernameError ? classes.ErrorIcons : classes.Icons
+                    }
+                  />
                 </InputAdornment>
               )
             }}
@@ -167,7 +269,7 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
           <TextField
             type="Password"
             value={loginInfo.Password}
-            placeholder="Enter Psssword"
+            placeholder={passwordError ? "Invalid Password" : "Enter Password"}
             className={classes.TextField}
             onChange={e =>
               setUserInfo({ ...loginInfo, Password: e.target.value })
@@ -175,7 +277,11 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <LockOutlinedIcon className={classes.Icons}/>
+                  <LockOutlinedIcon
+                    className={
+                      passwordError ? classes.ErrorIcons : classes.Icons
+                    }
+                  />
                 </InputAdornment>
               )
             }}
@@ -193,23 +299,33 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
             className={classes.submitButton}
             onClick={handleLoginSubmit}
           >
-            Submit
+            SIGN IN
           </Button>
           <br />
         </div>
         <div>
           <TextField
             type="Text"
-            value={clear ? "" : signupInfo.Name}
-            className={classes.SignupTextField}
-            placeholder="Enter Name"
+            value={signupInfo.Name}
+            className={
+              signupNameError
+                ? classes.SignupErrorTextField
+                : classes.SignupTextField
+            }
+            placeholder={
+              signupNameError ? "Name Should not be Empty" : "Enter Name"
+            }
             onChange={e =>
               setSignupInfo({ ...signupInfo, Name: e.target.value })
             }
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <AccountCircle className={classes.Icons}/>
+                  <AccountCircle
+                    className={
+                      signupNameError ? classes.ErrorIcons : classes.Icons
+                    }
+                  />
                 </InputAdornment>
               )
             }}
@@ -217,71 +333,118 @@ const Login = ({ setUserDetails, setGroupsDetails, UserDetails }) => {
           <br />
           <TextField
             type="Text"
-            value={clear ? "" : signupInfo.Email}
-            className={classes.SignupTextField}
-            placeholder="Enter Email"
+            value={signupInfo.Email}
+            className={
+              signupEmailError
+                ? classes.SignupErrorTextField
+                : classes.SignupTextField
+            }
+            placeholder={signupEmailError ? "Invalid Email " : "Enter Email"}
             onChange={e =>
               setSignupInfo({ ...signupInfo, Email: e.target.value })
             }
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <EmailOutlinedIcon className={classes.Icons}/>
+                  <EmailOutlinedIcon
+                    className={
+                      signupEmailError ? classes.ErrorIcons : classes.Icons
+                    }
+                  />
                 </InputAdornment>
               )
             }}
           />
+
           <br />
           <TextField
             type="Text"
-            value={clear ? "" : signupInfo.Username}
-            className={classes.SignupTextField}
-            placeholder="Set Username"
+            value={signupInfo.Username}
+            className={
+              signupUsernameError
+                ? classes.SignupErrorTextField
+                : classes.SignupTextField
+            }
+            placeholder={
+              signupUsernameError ? "Min 5 Characters" : "Set Username"
+            }
             onChange={e =>
               setSignupInfo({ ...signupInfo, Username: e.target.value })
             }
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <ContactMailOutlinedIcon className={classes.Icons}/>
+                  <ContactMailOutlinedIcon
+                    className={
+                      signupUsernameError ? classes.ErrorIcons : classes.Icons
+                    }
+                  />
                 </InputAdornment>
               )
             }}
           />
+
           <br />
           <TextField
             type="Password"
-            value={clear ? "" : signupInfo.Password}
-            placeholder="Enter Password"
-            className={classes.SignupTextField}
+            value={signupInfo.Password}
+            placeholder={
+              signupPasswordError ? "Min 8 characters" : "Enter Password"
+            }
+            className={
+              signupPasswordError
+                ? classes.SignupErrorTextField
+                : classes.SignupTextField
+            }
             onChange={e =>
               setSignupInfo({ ...signupInfo, Password: e.target.value })
             }
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <LockOutlinedIcon className={classes.Icons}/>
+                  <LockOutlinedIcon
+                    className={
+                      signupPasswordError ? classes.ErrorIcons : classes.Icons
+                    }
+                  />
                 </InputAdornment>
               )
             }}
           />
+
           <br />
           <TextField
             type="Password"
-            value={clear ? "" : signupInfo.Password}
-            placeholder="Retype Password"
-            className={classes.SignupTextField}
+            value={retypePassword}
+            placeholder={
+              signupRetypePasswordError
+                ? "Password not matched"
+                : "Retype Password"
+            }
+            className={
+              signupRetypePasswordError
+                ? classes.SignupErrorTextField
+                : classes.SignupTextField
+            }
+            onChange={e => setRetypePassword(e.target.value)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SettingsBackupRestoreIcon className={classes.Icons}/>
+                  <SettingsBackupRestoreIcon
+                    className={
+                      signupRetypePasswordError
+                        ? classes.ErrorIcons
+                        : classes.Icons
+                    }
+                  />
                 </InputAdornment>
               )
             }}
           />
+
           <br />
           <b>Return to </b>
-          <Link color="blue" onClick={() => fliptoSignup(!flip)}>
+          <Link color="blue" onClick={handleToReturnLoginPage}>
             <b className={classes.signup}>Login Page </b>
           </Link>
           <br />

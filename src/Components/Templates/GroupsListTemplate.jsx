@@ -46,6 +46,8 @@ import MessageOutlinedIcon from "@material-ui/icons/MessageOutlined";
 import Badge from "@material-ui/core/Badge";
 import FavLeftIcon from "../../Icons/FavLeftIcon";
 import FavRightIcon from "../../Icons/FavRightIcon";
+import DirectionsRunIcon from "@material-ui/icons/DirectionsRun";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Skeleton from "@material-ui/lab/Skeleton";
 import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
 import { useRef } from "react";
@@ -158,7 +160,7 @@ const GroupsListTemplate = props => {
   const [moreItemsAnchorEl, setmoreItemsAnchorEl] = React.useState(null);
   const [growAnimation, setgrowAnimation] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const favRef = useRef(null)
+  const favRef = useRef(null);
 
   const IconButtonItems = [
     {
@@ -303,6 +305,14 @@ const GroupsListTemplate = props => {
       showTooltip: true,
       showOnFav: false,
       click: () => {}
+    },
+    {
+      name: "Exit Group",
+      Icon: <DirectionsRunIcon className={classes.Icons} />,
+      groupManagerAccess: false,
+      showTooltip: true,
+      showOnFav: false,
+      click: () => {}
     }
   ];
   let GroupsInfo = props.groupsInfo;
@@ -410,7 +420,7 @@ const GroupsListTemplate = props => {
 
   useEffect(() => {
     setLoading(true);
-    window.scrollTo(0,favRef.current)
+    window.scrollTo(0, favRef.current);
     axios
       .get(`http://localhost:5000/Users/${currentUsername}`)
       .then(res =>
@@ -441,7 +451,7 @@ const GroupsListTemplate = props => {
 
   return (
     <div align="center">
-      <div align="center" ref= {favRef} className={classes.favDiv}>
+      <div align="center" ref={favRef} className={classes.favDiv}>
         <div
           className={
             showLeftFav && userFavStartIndex != 0
@@ -470,7 +480,7 @@ const GroupsListTemplate = props => {
                 animation="wave"
                 width={160}
                 height={180}
-                style={{marginRight:5, borderRadius:10}}
+                style={{ marginRight: 5, borderRadius: 10 }}
                 variant="rect"
               />
             ))

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import WorkSpaceList from "../Data/WorkSpaceList";
+import NavbarMobile from "../Components/MobileComponents/NavbarMobile";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Avatar from "@material-ui/core/Avatar";
@@ -119,7 +120,7 @@ const NewsFeed = () => {
           : console.log(res.status, res.statusText)
       )
       .catch(err => console.log(err));
-  },[]);
+  }, []);
 
   const postMessage = async () => {
     NewsFeedConfig = {
@@ -146,7 +147,7 @@ const NewsFeed = () => {
   };
   return (
     <div align="center">
-      {isMobile && isMobile ? <Navbar /> : <NavbarDesktop />}
+      {isMobile && isMobile ? <NavbarMobile /> : <NavbarDesktop />}
       <p>
         <b>
           <i>Post your thoughts to your BusinessShare Groups</i>

@@ -2,6 +2,7 @@ import { useHistory } from "react-router-dom";
 import Navbar from "./Navbar";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import NavbarDesktop from "./NavbarDesktop";
+import NavbarMobile from "../Components/MobileComponents/NavbarMobile";
 import Bot from "../Icons/Bot.png";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
@@ -125,7 +126,7 @@ const CreateGroup = ({ addNewGroupDetails }) => {
   //FYI: <pre/> tab spaces
   return (
     <div align="center">
-      {isMobile && isMobile ? <Navbar /> : <NavbarDesktop />}
+      {isMobile && isMobile ? <NavbarMobile /> : <NavbarDesktop />}
       <h3>
         <i>Create your Bspace Groups </i>{" "}
       </h3>

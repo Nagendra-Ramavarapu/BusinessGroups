@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import Navbar from "./Navbar";
+import NavbarMobile from "../Components/MobileComponents/NavbarMobile";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import NavbarDesktop from "./NavbarDesktop";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
@@ -82,7 +83,7 @@ const JoinGroup = () => {
   const sendGroupInvite = () => {};
   return (
     <div align="center">
-      {isMobile && isMobile ? <Navbar /> : <NavbarDesktop />}
+      {isMobile && isMobile ? <NavbarMobile /> : <NavbarDesktop />}
       <h3>
         <i> Check your Bspace Group Requests & Suggestions</i>
       </h3>
